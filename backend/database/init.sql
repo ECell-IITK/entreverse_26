@@ -1,76 +1,55 @@
-
+-- EntreVerse 2026 — database schema
+-- Runs automatically when the postgres container is first created.
 
 DROP TABLE IF EXISTS team_members CASCADE;
 DROP TABLE IF EXISTS teams CASCADE;
 DROP TABLE IF EXISTS competitions CASCADE;
 
--- COMPETITIONS
+-- ── COMPETITIONS ─────────────────────────────────────────────
+
 CREATE TABLE competitions (
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-
-    name VARCHAR(150) NOT NULL,
-
-    slug VARCHAR(150) UNIQUE NOT NULL,
-
-    description TEXT,
-
-    max_team_size SMALLINT NOT NULL,
-
-    min_team_size SMALLINT NOT NULL,
-
+    id                INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name              VARCHAR(150) NOT NULL,
+    slug              VARCHAR(150) UNIQUE NOT NULL,
+    description       TEXT,
+    max_team_size     SMALLINT NOT NULL,
+    min_team_size     SMALLINT NOT NULL,
     registration_open BOOLEAN DEFAULT TRUE,
-
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- TEAMS
+-- ── TEAMS ────────────────────────────────────────────────────
 
 CREATE TABLE teams (
-
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-
+    id            INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     competition_id INTEGER NOT NULL,
-
-    team_name VARCHAR(150) NOT NULL,
-
+    team_name     VARCHAR(150) NOT NULL,
     total_members SMALLINT NOT NULL,
-
-    comments TEXT,
-
-    submitted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    comments      TEXT,
+    submitted_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT fk_competition
-        FOREIGN KEY (competition_id)
-        REFERENCES competitions(id)
+        FOREIGN KEY (competition_id) REFERENCES competitions(id)
         ON DELETE CASCADE,
 
     CONSTRAINT valid_members
         CHECK (total_members > 0)
 );
 
--- TEAM MEMBERS
+-- ── TEAM MEMBERS ─────────────────────────────────────────────
 
 CREATE TABLE team_members (
-
-    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-
-    team_id INTEGER NOT NULL,
-
+    id           INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    team_id      INTEGER NOT NULL,
     member_order SMALLINT NOT NULL,
-
-    name VARCHAR(120) NOT NULL,
-
-    roll_no VARCHAR(30) NOT NULL,
-
-    email VARCHAR(150) NOT NULL,
-
-    phone VARCHAR(20) NOT NULL,
-
-    is_leader BOOLEAN NOT NULL DEFAULT FALSE,
+    name         VARCHAR(120) NOT NULL,
+    roll_no      VARCHAR(30) NOT NULL,
+    email        VARCHAR(150) NOT NULL,
+    phone        VARCHAR(20) NOT NULL,
+    is_leader    BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT fk_team
-        FOREIGN KEY (team_id)
-        REFERENCES teams(id)
+        FOREIGN KEY (team_id) REFERENCES teams(id)
         ON DELETE CASCADE,
 
     CONSTRAINT valid_member_order
@@ -83,17 +62,31 @@ CREATE TABLE team_members (
         UNIQUE (team_id, email)
 );
 
--- INDEXES
+-- ── INDEXES ──────────────────────────────────────────────────
 
-CREATE INDEX idx_team_competition
-ON teams(competition_id);
+CREATE INDEX idx_team_competition ON teams(competition_id);
+CREATE INDEX idx_member_team      ON team_members(team_id);
+CREATE INDEX idx_member_roll      ON team_members(roll_no);
+CREATE INDEX idx_member_email     ON team_members(email);
 
-CREATE INDEX idx_member_team
-ON team_members(team_id);
+-- ── SEED DATA ────────────────────────────────────────────────
 
-CREATE INDEX idx_member_roll
-ON team_members(roll_no);
-
-CREATE INDEX idx_member_email
-ON team_members(email);
-
+INSERT INTO competitions (name, slug, description, max_team_size, min_team_size) VALUES
+(
+    'Flip the Future',
+    'flip-the-future',
+    'A strategic investment and auction challenge where teams build portfolios under pressure.',
+    4, 2
+),
+(
+    'The Strategy Showdown',
+    'strategy-showdown',
+    'A business innovation challenge testing real-world problem-solving and strategic thinking.',
+    4, 2
+),
+(
+    'Start-up Sprint',
+    'startup-sprint',
+    'A 24-hour hackathon where teams build and pitch a working MVP from scratch.',
+    5, 1
+);

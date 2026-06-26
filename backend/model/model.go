@@ -8,7 +8,7 @@ type RegisterRequest struct {
 	CompetitionID int      `json:"competition_id" binding:"required"`
 	TeamName      string   `json:"team_name"      binding:"required,min=3,max=150"`
 	Comments      string   `json:"comments,omitempty"`
-	Members       []Member `json:"members"        binding:"required,min=1,max=5"`
+	Members       []Member `json:"members"        binding:"required,min=1,max=5,dive"`
 }
 
 type Member struct {
