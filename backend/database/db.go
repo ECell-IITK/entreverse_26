@@ -8,7 +8,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 )
-
+//using pgxpool for connection pooling and better performance
 var DB *pgxpool.Pool
 
 func Connect() error {
@@ -39,7 +39,7 @@ func Connect() error {
 		return err
 	}
 
-	fmt.Println("✅ PostgreSQL Connected")
+	fmt.Println("PostgreSQL Connected")
 
 	return nil
 }

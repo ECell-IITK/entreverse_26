@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -9,151 +10,234 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
+//  Health 
 
-// ── Health ───────────────────────────────────────────────────
-
+// GET /health
 func Health(c *gin.Context) {
-	c.JSON(http.StatusOK, model.HealthResponse{
-		Status:  "ok",
-		Version: "1.0.0",
-	})
+	c.JSON(http.StatusOK, model.HealthResponse{Status: "ok", Version: "1.0.0"})
 }
 
-// ── Competitions ─────────────────────────────────────────────
+//  Events 
 
-// GET /api/competitions?open=true
-func GetCompetitions(c *gin.Context) {
+// GET /api/events?active=true
+func GetEvents(c *gin.Context) {
+	activeOnly := c.Query("active") == "true"
 
-	openOnly := c.Query("open") == "true"
-
-	competitions, err := database.GetCompetitions(openOnly)
+	events, err := database.GetEvents(activeOnly)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
-			Success: false,
-			Error:   "failed to fetch competitions",
-		})
+		internalError(c, "failed to fetch events")
+		return
+	}
+	if events == nil {
+		events = []model.Event{}
+	}
+	c.JSON(http.StatusOK, model.AllEvents{Events: events, Total: len(events)})
+}
+
+// GET /api/events/:slug
+func GetEventBySlug(c *gin.Context) {
+	event, err := database.GetEventBySlug(c.Param("slug"))
+	if err != nil {
+		handleDBError(c, err, "event not found", "failed to fetch event")
+		return
+	}
+	c.JSON(http.StatusOK, event)
+}
+
+// GET /api/events/:slug/competitions?open=true
+func GetCompetitionsByEvent(c *gin.Context) {
+	event, err := database.GetEventBySlug(c.Param("slug"))
+	if err != nil {
+		handleDBError(c, err, "event not found", "failed to fetch event")
 		return
 	}
 
-	c.JSON(http.StatusOK, model.AllCompetitions{
-		Competitions: competitions,
-		Total:        len(competitions),
-	})
+	openOnly := c.Query("open") == "true"
+	comps, err := database.GetCompetitionsByEventID(event.ID, openOnly)
+	if err != nil {
+		internalError(c, "failed to fetch competitions")
+		return
+	}
+	if comps == nil {
+		comps = []model.Competition{}
+	}
+	c.JSON(http.StatusOK, model.AllCompetitions{Competitions: comps, Total: len(comps)})
+}
+
+//  Competitions 
+
+// GET /api/competitions?open=true
+func GetCompetitions(c *gin.Context) {
+	openOnly := c.Query("open") == "true"
+
+	comps, err := database.GetCompetitions(openOnly)
+	if err != nil {
+		internalError(c, "failed to fetch competitions")
+		return
+	}
+	if comps == nil {
+		comps = []model.Competition{}
+	}
+	c.JSON(http.StatusOK, model.AllCompetitions{Competitions: comps, Total: len(comps)})
 }
 
 // GET /api/competitions/:id
 func GetCompetitionByID(c *gin.Context) {
-
-	idStr := c.Param("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Success: false,
-			Error:   "invalid competition id",
-		})
+	id, ok := parseID(c, "id")
+	if !ok {
 		return
 	}
-
 	comp, err := database.GetCompetitionByID(id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
-			Success: false,
-			Error:   "failed to fetch competition",
-		})
+		handleDBError(c, err, "competition not found", "failed to fetch competition")
 		return
 	}
-
-	if comp == nil {
-		c.JSON(http.StatusNotFound, model.ErrorResponse{
-			Success: false,
-			Error:   "competition not found",
-		})
-		return
-	}
-
 	c.JSON(http.StatusOK, comp)
 }
 
-// ── Registration ─────────────────────────────────────────────
+// GET /api/competitions/slug/:slug
+func GetCompetitionBySlug(c *gin.Context) {
+	comp, err := database.GetCompetitionBySlug(c.Param("slug"))
+	if err != nil {
+		handleDBError(c, err, "competition not found", "failed to fetch competition")
+		return
+	}
+	c.JSON(http.StatusOK, comp)
+}
+
+//  Registration 
 
 // POST /api/register
 func Register(c *gin.Context) {
-
 	var req model.RegisterRequest
-
 	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Success: false,
-			Error:   err.Error(),
-		})
+		badRequest(c, err.Error())
 		return
 	}
 
-	// ── Validate: exactly one leader ─────────────────────────
-	leaderCount := 0
-	for _, m := range req.Members {
-		if m.IsLeader {
-			leaderCount++
-		}
-	}
-	if leaderCount != 1 {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Success: false,
-			Error:   "exactly one member must be marked as leader",
-		})
-		return
-	}
-
-	// ── Validate: competition exists and is open ─────────────
-	comp, err := database.GetCompetitionByID(req.CompetitionID)
+	// 1. Fetch competition (with code)
+	comp, err := database.GetCompetitionRowByID(req.CompetitionID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, model.ErrorResponse{
-			Success: false,
-			Error:   "failed to validate competition",
-		})
+		handleDBError(c, err, "competition not found", "failed to validate competition")
 		return
 	}
-	if comp == nil {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Success: false,
-			Error:   "competition not found",
-		})
-		return
-	}
-	if !comp.RegistrationOpen {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Success: false,
-			Error:   "registration is closed for this competition",
+
+	// 2. Validate registration code (constant-time)
+	if !secureEqual(req.RegistrationCode, comp.RegistrationCode) {
+		c.JSON(http.StatusForbidden, model.ErrorResponse{
+			Success: false, Error: "invalid registration code", Code: http.StatusForbidden,
 		})
 		return
 	}
 
-	// ── Validate: team size within competition limits ─────────
+	// 3. Check registration open
+	if !comp.RegistrationOpen {
+		c.JSON(http.StatusGone, model.ErrorResponse{
+			Success: false, Error: "registration is closed for this competition", Code: http.StatusGone,
+		})
+		return
+	}
+
+	// 4. Team size
 	n := len(req.Members)
 	if n < comp.MinTeamSize || n > comp.MaxTeamSize {
-		c.JSON(http.StatusBadRequest, model.ErrorResponse{
-			Success: false,
-			Error:   "team size must be between " +
-				strconv.Itoa(comp.MinTeamSize) + " and " +
-				strconv.Itoa(comp.MaxTeamSize),
-		})
+		badRequest(c, "team size must be between "+
+			strconv.Itoa(comp.MinTeamSize)+" and "+strconv.Itoa(comp.MaxTeamSize)+" members")
 		return
 	}
 
-	// ── Insert ───────────────────────────────────────────────
+	// 5. Exactly one leader
+	leaders := 0
+	for _, m := range req.Members {
+		if m.IsLeader {
+			leaders++
+		}
+	}
+	if leaders != 1 {
+		badRequest(c, "exactly one member must be marked as leader")
+		return
+	}
+
+	// 6. Insert
 	teamID, err := database.RegisterTeam(req)
 	if err != nil {
-		// Surface duplicate roll/email constraint clearly
-		c.JSON(http.StatusConflict, model.ErrorResponse{
-			Success: false,
-			Error:   "registration failed: " + err.Error(),
-		})
+		handleRegisterError(c, err)
 		return
 	}
 
 	c.JSON(http.StatusCreated, model.RegisterResponse{
-		Success: true,
-		Message: "team registered successfully",
-		TeamID:  teamID,
+		Success: true, Message: "team registered successfully", TeamID: teamID,
 	})
+}
+
+// GET /api/registrations/:team_id
+func GetRegistration(c *gin.Context) {
+	teamID, ok := parseID(c, "team_id")
+	if !ok {
+		return
+	}
+	detail, err := database.GetRegistrationByTeamID(teamID)
+	if err != nil {
+		handleDBError(c, err, "registration not found", "failed to fetch registration")
+		return
+	}
+	c.JSON(http.StatusOK, detail)
+}
+
+
+
+func parseID(c *gin.Context, param string) (int, bool) {
+	id, err := strconv.Atoi(c.Param(param))
+	if err != nil {
+		badRequest(c, "invalid "+param)
+		return 0, false
+	}
+	return id, true
+}
+
+func badRequest(c *gin.Context, msg string) {
+	c.JSON(http.StatusBadRequest, model.ErrorResponse{
+		Success: false, Error: msg, Code: http.StatusBadRequest,
+	})
+}
+
+func internalError(c *gin.Context, msg string) {
+	c.JSON(http.StatusInternalServerError, model.ErrorResponse{
+		Success: false, Error: msg, Code: http.StatusInternalServerError,
+	})
+}
+
+func handleDBError(c *gin.Context, err error, notFoundMsg, serverMsg string) {
+	if errors.Is(err, database.ErrNotFound) {
+		c.JSON(http.StatusNotFound, model.ErrorResponse{
+			Success: false, Error: notFoundMsg, Code: http.StatusNotFound,
+		})
+		return
+	}
+	internalError(c, serverMsg)
+}
+
+func handleRegisterError(c *gin.Context, err error) {
+	switch {
+	case errors.Is(err, database.ErrDuplicateTeam),
+		errors.Is(err, database.ErrDuplicateRoll),
+		errors.Is(err, database.ErrDuplicateEmail):
+		c.JSON(http.StatusConflict, model.ErrorResponse{
+			Success: false, Error: err.Error(), Code: http.StatusConflict,
+		})
+	default:
+		internalError(c, "registration failed: internal error")
+	}
+}
+
+// secureEqual does constant-time string comparison.
+func secureEqual(a, b string) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	var diff byte
+	for i := 0; i < len(a); i++ {
+		diff |= a[i] ^ b[i]
+	}
+	return diff == 0
 }
