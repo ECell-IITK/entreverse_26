@@ -105,27 +105,6 @@ export function InnovationCore() {
         })}
       </motion.div>
 
-      {/* Glowing core */}
-      <motion.div
-        style={{ scale: coreScale }}
-        className="relative z-10 flex h-32 w-32 items-center justify-center rounded-full"
-      >
-        <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_50%_40%,#fde68a_0%,#f59e0b_38%,#0b1120_75%)] blur-[2px]" />
-        <div
-          className="absolute -inset-6 rounded-full bg-amber/30 blur-2xl"
-          style={{ animation: 'core-breathe 5s ease-in-out infinite' }}
-        />
-        <div className="absolute -inset-12 rounded-full bg-sky/10 blur-3xl" />
-        <div className="relative flex flex-col items-center gap-1 text-center">
-          <Sparkles className="h-7 w-7 text-[#160c00]" />
-          <span className="font-heading text-[10px] font-bold uppercase tracking-[0.18em] text-[#160c00]">
-            Innovation
-          </span>
-          <span className="font-heading text-[10px] font-bold uppercase tracking-[0.18em] text-[#160c00]">
-            Core
-          </span>
-        </div>
-      </motion.div>
     </div>
   )
 }

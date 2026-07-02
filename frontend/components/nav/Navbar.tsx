@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -8,41 +7,72 @@ const LINKS = [
   'About',
   'Competitions',
   'Workshops',
-  'Speakers',
+  'Discussions',
   'Timeline',
-  'Sponsors',
   'FAQ',
 ]
 
 export function SiteNav() {
-  const [scrolled, setScrolled] = useState(false)
+  const [scrollY, setScrollY] = useState(0)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
+    const handleScroll = () => {
+      setScrollY(window.scrollY)
+    }
 
-    onScroll()
+    handleScroll()
 
-    window.addEventListener('scroll', onScroll, {
+    window.addEventListener('scroll', handleScroll, {
       passive: true,
     })
 
-    return () => window.removeEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Progress (0 → 1)
+  const progress = Math.min(scrollY / 400, 1)
+  // Glass opacity
+  const backgroundOpacity = 0.015 + progress * 0.085
+  // Border opacity
+  const borderOpacity = 0.04 + progress * 0.11
+  // Blur amount
+  const blur = 12 + progress * 36
+  // Shadow opacity
+  const shadowOpacity = progress * 7
+  // Shrink navbar
+  const paddingY = 18 - progress * 10
+  const paddingX = 32 - progress * 12
 
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-6 pt-6">
         <nav
-          className={`flex w-full max-w-7xl items-center justify-between rounded-3xl border transition-all duration-300
-          
-          ${
-            scrolled
-              ? 'border-white/15 bg-white/[0.08] shadow-[0_10px_40px_rgba(0,0,0,0.45)] backdrop-blur-2xl'
-              : 'border-white/10 bg-white/[0.04] backdrop-blur-xl'
-          }
-
-          px-8 py-4`}
+          style={{
+            background: `rgba(255,255,255,${backgroundOpacity})`,
+            borderColor: `rgba(255,255,255,${borderOpacity})`,
+            backdropFilter: `blur(${blur}px)`,
+            WebkitBackdropFilter: `blur(${blur}px)`,
+            boxShadow: `
+              0 10px 40px rgba(0,0,0,${shadowOpacity}),
+              inset 0 1px rgba(255,255,255,0.05)
+            `,
+            paddingTop: `${paddingY}px`,
+            paddingBottom: `${paddingY}px`,
+            paddingLeft: `${paddingX}px`,
+            paddingRight: `${paddingX}px`,
+          }}
+          className="
+            flex
+            w-full
+            max-w-7xl
+            items-center
+            justify-between
+            rounded-3xl
+            border
+            transition-all
+            duration-150
+          "
         >
           {/* Logo */}
           <a href="#top" className="flex items-center gap-3">
@@ -51,7 +81,7 @@ export function SiteNav() {
             </div>
 
             <div className="leading-none">
-              <h2 className="font-heading text-lg font-bold tracking-tight">
+              <h2 className="font-heading text-lg font-bold">
                 EntreVerse
               </h2>
 
@@ -67,7 +97,17 @@ export function SiteNav() {
               <li key={link}>
                 <a
                   href={`#${link.toLowerCase()}`}
-                  className="rounded-xl px-4 py-2 text-sm text-muted-foreground transition-all duration-300 hover:bg-white/5 hover:text-white"
+                  className="
+                    rounded-xl
+                    px-4
+                    py-2
+                    text-sm
+                    text-muted-foreground
+                    transition-all
+                    duration-300
+                    hover:bg-white/5
+                    hover:text-white
+                  "
                 >
                   {link}
                 </a>
@@ -79,14 +119,32 @@ export function SiteNav() {
           <div className="flex items-center gap-4">
             <a
               href="#dashboard"
-              className="hidden text-sm font-medium text-muted-foreground transition hover:text-white lg:block"
+              className="hidden text-sm text-muted-foreground transition hover:text-white lg:block"
             >
               Dashboard
             </a>
 
             <a
               href="#register"
-              className="hidden rounded-full bg-gradient-to-r from-amber-400 to-orange-500 px-6 py-3 text-sm font-semibold text-black shadow-lg shadow-orange-500/25 transition-all duration-300 hover:scale-105 hover:shadow-orange-500/50 lg:block"
+              className="
+                hidden
+                rounded-full
+                bg-gradient-to-r
+                from-amber-400
+                to-orange-500
+                px-6
+                py-3
+                text-sm
+                font-semibold
+                text-black
+                shadow-lg
+                shadow-orange-500/20
+                transition-all
+                duration-300
+                hover:scale-105
+                hover:shadow-orange-500/40
+                lg:block
+              "
             >
               Register Now
             </a>
@@ -94,7 +152,15 @@ export function SiteNav() {
             {/* Mobile Menu */}
             <button
               onClick={() => setOpen(!open)}
-              className="rounded-xl border border-white/10 bg-white/5 p-2 backdrop-blur lg:hidden"
+              className="
+                rounded-xl
+                border
+                border-white/10
+                bg-white/5
+                p-2
+                backdrop-blur-xl
+                lg:hidden
+              "
             >
               {open ? (
                 <X className="h-5 w-5" />
@@ -108,14 +174,38 @@ export function SiteNav() {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="fixed left-6 right-6 top-24 z-40 rounded-3xl border border-white/10 bg-black/60 p-5 backdrop-blur-2xl lg:hidden">
+        <div
+          className="
+            fixed
+            left-6
+            right-6
+            top-24
+            z-40
+            rounded-3xl
+            border
+            border-white/10
+            bg-black/40
+            p-5
+            backdrop-blur-3xl
+            lg:hidden
+          "
+        >
           <ul className="space-y-2">
             {LINKS.map((link) => (
               <li key={link}>
                 <a
                   href={`#${link.toLowerCase()}`}
                   onClick={() => setOpen(false)}
-                  className="block rounded-xl px-4 py-3 text-muted-foreground transition hover:bg-white/5 hover:text-white"
+                  className="
+                    block
+                    rounded-xl
+                    px-4
+                    py-3
+                    text-muted-foreground
+                    transition
+                    hover:bg-white/5
+                    hover:text-white
+                  "
                 >
                   {link}
                 </a>
@@ -126,7 +216,17 @@ export function SiteNav() {
               <a
                 href="#register"
                 onClick={() => setOpen(false)}
-                className="block rounded-full bg-gradient-to-r from-amber-400 to-orange-500 py-3 text-center font-semibold text-black"
+                className="
+                  block
+                  rounded-full
+                  bg-gradient-to-r
+                  from-amber-400
+                  to-orange-500
+                  py-3
+                  text-center
+                  font-semibold
+                  text-black
+                "
               >
                 Register Now
               </a>

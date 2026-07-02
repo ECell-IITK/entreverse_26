@@ -7,25 +7,22 @@ import { Lightbulb, Users, Rocket, Building2 } from 'lucide-react'
 const STAGES = [
   {
     icon: Lightbulb,
-    step: '01',
     title: 'Spark',
     desc: 'A raw idea takes shape inside the Innovation Core.',
   },
   {
     icon: Users,
-    step: '02',
+  
     title: 'Collaborate',
     desc: 'Founders, mentors, and investors connect into networks.',
   },
   {
     icon: Rocket,
-    step: '03',
     title: 'Launch',
     desc: 'Prototypes break orbit and become real ventures.',
   },
   {
     icon: Building2,
-    step: '04',
     title: 'Impact',
     desc: 'Ideas mature into companies that change the world.',
   },
@@ -49,14 +46,6 @@ export function GrowthSection() {
         viewport={{ once: true, margin: '-80px' }}
         className="mx-auto max-w-2xl text-center"
       >
-        <motion.span
-          variants={fade}
-          custom={0}
-          className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs text-muted-foreground"
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-          The Journey
-        </motion.span>
         <motion.h2
           variants={fade}
           custom={1}
@@ -91,9 +80,6 @@ export function GrowthSection() {
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-primary/25">
                 <s.icon className="h-5 w-5" />
               </span>
-              <span className="font-mono text-xs text-muted-foreground">
-                {s.step}
-              </span>
             </div>
             <h3 className="mt-5 font-heading text-xl font-bold">{s.title}</h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
@@ -105,9 +91,9 @@ export function GrowthSection() {
 
       {/* Stats band */}
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
+        initial={{ opacity: 0, y: 5 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
+        viewport={{ once: true, margin: '-40px' }}
         transition={{ duration: 0.6 }}
         className="glass mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-2xl md:grid-cols-4"
       >
@@ -127,7 +113,7 @@ export function GrowthSection() {
       </motion.div>
 
       {/* Final CTA */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
@@ -148,7 +134,7 @@ export function GrowthSection() {
         >
           Register Now
         </a>
-      </motion.div>
+      </motion.div> */}
     </section>
   )
 }
