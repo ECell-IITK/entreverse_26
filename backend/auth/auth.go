@@ -41,7 +41,7 @@ func Init() error {
 		idx := strings.Index(pair, ":")
 		if idx < 1 {
 			return fmt.Errorf("ADMIN_CREDENTIALS: malformed entry %q (expected user:hash)", pair)
-		}9
+		}
 		username := pair[:idx]
 		hash := pair[idx+1:]
 		if username == "" || hash == "" {

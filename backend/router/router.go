@@ -19,10 +19,10 @@ func SetupRouter() *gin.Engine {
 
 	api := r.Group("/api")
 	{
-		
+
 		// GET /api/events                          list all events (?active=true)
 		// GET /api/events/:slug                    single event by slug
-		// GET /api/events/:slug/competitions        competitions for that event (?open=true)
+		// GET /api/events/:slug/competitions       competitions for that event (?open=true)
 		api.GET("/events", handler.GetEvents)
 		api.GET("/events/:slug", handler.GetEventBySlug)
 		api.GET("/events/:slug/competitions", handler.GetCompetitionsByEvent)
@@ -38,8 +38,8 @@ func SetupRouter() *gin.Engine {
 		// GET  /api/registrations/:team_id         look up own registration
 		api.POST("/register", middleware.RateLimit(10), handler.Register)
 		api.GET("/registrations/:team_id", handler.GetRegistration)
-
-		// POST /api/admin/login
+ 
+		// POST /api/admin/login                    admin login
 		api.POST("/admin/login", handler.AdminLogin)
 
 		admin := api.Group("/admin")
