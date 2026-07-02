@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { Orbit, ArrowUp, Send, Heart } from 'lucide-react'
+import Image from 'next/image'
 
 const SOCIAL_LINKS = [
   {
@@ -106,8 +107,25 @@ export function SiteFooter() {
 
   return (
     <footer className="relative mt-8 overflow-hidden border-t border-white/[0.07]">
-      {/* Subtle ambient glow behind footer */}
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_80%_40%_at_50%_100%,rgba(249,115,22,0.07),transparent)]" />
+
+      {/* ── Full-bleed map background ── */}
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/iitk_map.png"
+          alt=""
+          aria-hidden="true"
+          fill
+          className="object-cover object-center opacity-55"
+          sizes="100vw"
+          priority={false}
+        />
+        {/* Dark overlay so content stays readable */}
+        <div className="absolute inset-0 bg-[#07080f]/55" />
+        {/* Top fade — blends with the page above */}
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#07080f] to-transparent" />
+        {/* Ambient orange glow centre-bottom (matches original) */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_40%_at_50%_100%,rgba(249,115,22,0.09),transparent)]" />
+      </div>
 
       {/* ── Main footer body ── */}
       <div className="mx-auto max-w-6xl px-4 py-16">

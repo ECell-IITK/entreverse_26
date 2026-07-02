@@ -122,7 +122,7 @@ export function Hero() {
             id="register"
           >
             <a
-              href="#register"
+              href="/register"
               className="animate-pulse-ring group inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-[0_0_30px_-6px_rgba(245,158,11,0.8)] transition-transform hover:scale-[1.03]"
             >
               Register Now

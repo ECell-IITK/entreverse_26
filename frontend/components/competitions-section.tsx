@@ -14,7 +14,7 @@ const COMPETITIONS = [
     description:
       'Strategic decision-making and smart investments are the keys to this challenge. Teams (preferably Y25s) will bid for the most promising opportunities from a set of firms, using provided summaries to evaluate options and outsmart competitors. Shortlisted teams will advance to the finale to present their portfolios and compete for exciting prizes.',
     highlights: ['Portfolio Building', 'Competitive Bidding', 'Finale Presentations'],
-    registerHref: '#register',
+    registerHref: '/register?competition=flip-the-future',
   },
   {
     id: 'strategy-showdown',
@@ -26,7 +26,7 @@ const COMPETITIONS = [
     description:
       'An opportunity to dive into the world of entrepreneurship, this challenge invites participants (preferably PGs) to step into the shoes of business innovators. Teams will explore real-world problems in different domains of business, unleash their creativity, and craft impactful solutions to transform problems into opportunities.',
     highlights: ['Real-World Problems', 'Cross-Domain Business', 'Creative Solutions'],
-    registerHref: '#register',
+    registerHref: '/register?competition=strategy-showdown',
   },
   {
     id: 'startup-sprint',
@@ -38,7 +38,7 @@ const COMPETITIONS = [
     description:
       '"One Day One Idea Infinite Potential" — An intense full day challenge where teams transform ideas into MVPs and prototypes before sunrise. From brainstorming to building, every hour tests creativity, speed, and strategy. The most promising solutions will pitch at dawn for a chance to win big.',
     highlights: ['Idea to MVP', 'Full-Day Sprint', 'Pitch at Dawn'],
-    registerHref: '#register',
+    registerHref: '/register?competition=startup-sprint',
   },
 ]
 
@@ -250,7 +250,7 @@ export function CompetitionsSection() {
           </p>
         </div>
         <a
-          href="#register"
+          href="/register"
           className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-6 py-3 text-sm font-semibold text-black shadow-lg shadow-orange-500/20 transition-all hover:scale-[1.04] hover:shadow-orange-500/40"
         >
           Register Now

@@ -36,7 +36,7 @@ const EVENTS: EventBlock[] = [
       {
         name: 'Charles Avinash',
         role: 'Manager and Domain Head, SIIC IIT Kanpur',
-        image: '/images/charlesir_iitk.png',
+        image: '/public/charlesir_iitk.png',
       },
     ],
   },
@@ -51,7 +51,7 @@ const EVENTS: EventBlock[] = [
       {
         name: 'Akashjyoti Das',
         role: 'Founder, FoodioTech',
-        image: '/images/Akashjyoti.jpeg',
+        image: '/public/Akashjyoti.jpeg',
       },
     ],
   },
@@ -145,7 +145,6 @@ function SpeakerCard({
   )
 }
 
-// ─── Event Block ─────────────────────────────────────────────────────────────
 
 function EventBlock({ event, blockIndex }: { event: EventBlock; blockIndex: number }) {
   const t = TONE[event.tone]
@@ -198,7 +197,6 @@ function EventBlock({ event, blockIndex }: { event: EventBlock; blockIndex: numb
         </span>
       </div>
 
-      {/* ── Speaker cards grid ── */}
       {/* Grid: auto-fit up to 3 columns, cards center nicely when count < 3 */}
       <div className="mx-auto grid max-w-4xl justify-center gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {event.speakers.map((speaker, i) => (
@@ -214,7 +212,6 @@ function EventBlock({ event, blockIndex }: { event: EventBlock; blockIndex: numb
   )
 }
 
-// ─── Main Section ─────────────────────────────────────────────────────────────
 
 export function EventsSection() {
   return (

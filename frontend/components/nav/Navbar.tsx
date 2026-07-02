@@ -125,7 +125,7 @@ export function SiteNav() {
             </a>
 
             <a
-              href="#register"
+              href="/register"
               className="
                 hidden
                 rounded-full
