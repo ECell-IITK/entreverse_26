@@ -140,8 +140,8 @@ export function SiteFooter() {
           <motion.div variants={fade} custom={0} className="flex flex-col gap-5">
             {/* Logo mark */}
             <a href="#top" className="flex items-center gap-3 self-start">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10">
-                <Orbit className="h-5 w-5 text-primary" />
+              <div className="flex h-15 w-15 items-center justify-center">
+                <img src= "/logo_ecell.png" alt="EntreVerse Logo" className="h-10 w-10" />
               </div>
               <div className="leading-none">
                 <p className="font-heading text-base font-bold">EntreVerse</p>
@@ -251,9 +251,9 @@ export function SiteFooter() {
               href="https://www.ecelliitk.org/"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground"
+              className="mt-8 inline-flex items-center gap-1.5 text-m text-muted-foreground transition-colors hover:text-foreground"
             >
-              <Orbit className="h-3.5 w-3.5 text-primary" />
+              <img src="/logo_ecell.png" alt="E-Cell Logo" className="h-8 w-8" />
               ecelliitk.org
             </a>
           </motion.div>

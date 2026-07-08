@@ -19,7 +19,7 @@ type EventBlock = {
   /** Fallback lucide icon while the image loads / if missing */
   FallbackIcon: React.ElementType
   tone: 'cyan' | 'orange'
-  type: string   // e.g. "AMA Session"
+  type: string  
   title: string  // e.g. "Startup 101"
   speakers: Speaker[]
 }
@@ -189,12 +189,12 @@ function EventBlock({ event, blockIndex }: { event: EventBlock; blockIndex: numb
         </div>
 
         {/* Session type */}
-        <span
+        {/* <span
           className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium ${t.accentBg} ${t.accent} ${t.accentBorder}`}
         >
           <span className={`h-1.5 w-1.5 rounded-full ${t.dot}`} />
           {event.type}
-        </span>
+        </span> */}
       </div>
 
       {/* Grid: auto-fit up to 3 columns, cards center nicely when count < 3 */}

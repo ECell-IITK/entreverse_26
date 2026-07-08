@@ -9,7 +9,6 @@ const LINKS = [
   'Workshops',
   'Discussions',
   'Timeline',
-  'FAQ',
 ]
 
 export function SiteNav() {
@@ -76,8 +75,8 @@ export function SiteNav() {
         >
           {/* Logo */}
           <a href="#top" className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-primary/30 bg-primary/10">
-              <Orbit className="h-5 w-5 text-primary" />
+            <div className="flex h-11 w-11 items-center justify-center">
+              <img src= "/logo_ecell.png" alt="EntreVerse Logo" />
             </div>
 
             <div className="leading-none">
@@ -99,9 +98,9 @@ export function SiteNav() {
                   href={`#${link.toLowerCase()}`}
                   className="
                     rounded-xl
-                    px-4
-                    py-2
-                    text-sm
+                    px-8
+                    py-4
+                    text-m
                     text-muted-foreground
                     transition-all
                     duration-300
@@ -214,7 +213,7 @@ export function SiteNav() {
 
             <li className="pt-3">
               <a
-                href="#register"
+                href="/register"
                 onClick={() => setOpen(false)}
                 className="
                   block

@@ -121,7 +121,7 @@ function RegisterPageInner() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
           <a href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/30 bg-primary/10">
-              <Orbit className="h-4 w-4 text-primary" />
+              <img src="/logo_ecell.png" alt="EntreVerse Logo" className="h-5 w-5" />
             </div>
             <div className="leading-none">
               <p className="font-heading text-sm font-bold">EntreVerse</p>
