@@ -108,6 +108,108 @@ func AdminGetTeamsByEvent(c *gin.Context) {
 	c.JSON(http.StatusOK, model.AllTeams{Teams: teams, Total: len(teams)})
 }
 
+// Admin: all teams 
+
+// GET /api/admin/teams  — all teams across everything
+func AdminGetAllTeams(c *gin.Context) {
+	teams, err := database.GetAllTeams()
+	if err != nil {
+		internalError(c, "failed to fetch teams")
+		return
+	}
+	if teams == nil {
+		teams = []model.TeamSummary{}
+	}
+	c.JSON(http.StatusOK, model.AllTeams{Teams: teams, Total: len(teams)})
+}
+
+// Admin: update competition 
+
+// PATCH /api/admin/competitions/:id
+func AdminUpdateCompetition(c *gin.Context) {
+	id, ok := parseID(c, "id")
+	if !ok {
+		return
+	}
+
+	var req model.UpdateCompetitionRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		badRequest(c, err.Error())
+		return
+	}
+
+	if req.MinTeamSize > req.MaxTeamSize {
+		badRequest(c, "min_team_size cannot be greater than max_team_size")
+		return
+	}
+
+	comp, err := database.UpdateCompetition(id, req)
+	if err != nil {
+		if errors.Is(err, database.ErrNotFound) {
+			c.JSON(http.StatusNotFound, model.ErrorResponse{Success: false, Error: "competition not found", Code: http.StatusNotFound})
+			return
+		}
+		if errors.Is(err, database.ErrDuplicateSlug) {
+			c.JSON(http.StatusConflict, model.ErrorResponse{Success: false, Error: "slug already in use", Code: http.StatusConflict})
+			return
+		}
+		internalError(c, "failed to update competition")
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"success": true, "competition": comp})
+}
+
+// Admin: create event 
+
+// POST /api/admin/events
+func AdminCreateEvent(c *gin.Context) {
+	var req model.CreateEventRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		badRequest(c, err.Error())
+		return
+	}
+
+	id, err := database.CreateEvent(req)
+	if err != nil {
+		if errors.Is(err, database.ErrDuplicateSlug) {
+			c.JSON(http.StatusConflict, model.ErrorResponse{Success: false, Error: "an event with that slug already exists", Code: http.StatusConflict})
+			return
+		}
+		internalError(c, "failed to create event")
+		return
+	}
+
+	event, err := database.GetEventByID(id)
+	if err != nil {
+		c.JSON(http.StatusCreated, gin.H{"success": true, "id": id})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"success": true, "event": event})
+}
+
+// Admin: update event 
+
+// PATCH /api/admin/events/:id
+func AdminUpdateEvent(c *gin.Context) {
+	id, ok := parseID(c, "id")
+	if !ok {
+		return
+	}
+
+	var req model.UpdateEventRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		badRequest(c, err.Error())
+		return
+	}
+
+	event, err := database.UpdateEvent(id, req)
+	if err != nil {
+		handleDBError(c, err, "event not found", "failed to update event")
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"success": true, "event": event})
+}
+
 // Admin: create competition 
 
 // POST /api/admin/competitions

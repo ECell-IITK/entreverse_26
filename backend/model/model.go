@@ -91,6 +91,32 @@ type CreateCompetitionRequest struct {
 	RegistrationCode string `json:"registration_code" binding:"required,min=6"`
 }
 
+// UpdateCompetitionRequest is used for PATCH /api/admin/competitions/:id.
+// RegistrationCode is optional — omit to leave it unchanged.
+type UpdateCompetitionRequest struct {
+	Name             string `json:"name"              binding:"required,min=3,max=150"`
+	Description      string `json:"description"`
+	MaxTeamSize      int    `json:"max_team_size"     binding:"required,min=1,max=10"`
+	MinTeamSize      int    `json:"min_team_size"     binding:"required,min=1,max=10"`
+	RegistrationOpen bool   `json:"registration_open"`
+	RegistrationCode string `json:"registration_code,omitempty"`
+}
+
+// CreateEventRequest is used for POST /api/admin/events.
+type CreateEventRequest struct {
+	Name        string `json:"name"        binding:"required,min=3,max=150"`
+	Slug        string `json:"slug"        binding:"required,min=3,max=150"`
+	Description string `json:"description"`
+	IsActive    bool   `json:"is_active"`
+}
+
+// UpdateEventRequest is used for PATCH /api/admin/events/:id.
+type UpdateEventRequest struct {
+	Name        string `json:"name"        binding:"required,min=3,max=150"`
+	Description string `json:"description"`
+	IsActive    bool   `json:"is_active"`
+}
+
 
 
 // TeamSummary is returned in list responses (no member detail).

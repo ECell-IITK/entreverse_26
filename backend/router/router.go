@@ -46,16 +46,26 @@ func SetupRouter() *gin.Engine {
 		admin.Use(middleware.RequireAdmin())
 		{
 			// Team queries
+			// GET  /api/admin/teams                              all teams (global)
 			// GET  /api/admin/teams/:team_id                     full team detail
 			// GET  /api/admin/competitions/:competition_id/teams  all teams in a competition
 			// GET  /api/admin/events/:event_id/teams             all teams in an event
+			admin.GET("/teams", handler.AdminGetAllTeams)
 			admin.GET("/teams/:team_id", handler.AdminGetTeamByID)
 			admin.GET("/competitions/:competition_id/teams", handler.AdminGetTeamsByCompetition)
 			admin.GET("/events/:event_id/teams", handler.AdminGetTeamsByEvent)
 
 			// Competition management
-			// POST /api/admin/competitions   create a new competition
+			// POST  /api/admin/competitions         create a new competition
+			// PATCH /api/admin/competitions/:id     update / toggle registration
 			admin.POST("/competitions", handler.AdminCreateCompetition)
+			admin.PATCH("/competitions/:id", handler.AdminUpdateCompetition)
+
+			// Event management
+			// POST  /api/admin/events        create a new event
+			// PATCH /api/admin/events/:id    update / toggle active
+			admin.POST("/events", handler.AdminCreateEvent)
+			admin.PATCH("/events/:id", handler.AdminUpdateEvent)
 		}
 	}
 
