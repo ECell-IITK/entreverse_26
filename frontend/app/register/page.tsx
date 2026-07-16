@@ -120,8 +120,8 @@ function RegisterPageInner() {
       <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-background/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
           <a href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-primary/30 bg-primary/10">
-              <img src="/logo_ecell.png" alt="EntreVerse Logo" className="h-5 w-5" />
+            <div className="flex h-9 w-9 items-center justify-center">
+              <img src="/logo_ecell.png" alt="EntreVerse Logo" className="h-10 w-10" />
             </div>
             <div className="leading-none">
               <p className="font-heading text-sm font-bold">EntreVerse</p>
@@ -141,8 +141,8 @@ function RegisterPageInner() {
             animate={{ opacity: 1, y: 0 }}
             className="mb-10 text-center"
           >
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
-              <Sparkles className="h-3 w-3" /> EntreVerse 2026 Registration
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-semibold uppercase tracking-widest text-primary">
+              <Sparkles className="h-6 w-6" /> EntreVerse 2026 Registration
             </span>
           </motion.div>
         )}
