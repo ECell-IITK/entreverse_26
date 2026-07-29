@@ -32,6 +32,11 @@ func main() {
 	}
 	defer database.DB.Close()
 
+	// Seed admin accounts (idempotent — safe on every restart)
+	if err := database.SeedAdmins(); err != nil {
+		log.Fatalf("Admin seeding failed: %v", err)
+	}
+
 	//── HTTP server 
 	port := os.Getenv("PORT")
 	if port == "" {

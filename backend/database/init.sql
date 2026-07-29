@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS team_members  CASCADE;
 DROP TABLE IF EXISTS teams         CASCADE;
 DROP TABLE IF EXISTS competitions  CASCADE;
 DROP TABLE IF EXISTS events        CASCADE;
+DROP TABLE IF EXISTS admins        CASCADE;
 
 -- ── EVENTS ───────────────────────────────────────────────────
 -- An event is a top-level programme (e.g. "EntreVerse 2026").
@@ -98,6 +99,20 @@ CREATE TABLE team_members (
 CREATE INDEX idx_member_team  ON team_members(team_id);
 CREATE INDEX idx_member_roll  ON team_members(roll_no);
 CREATE INDEX idx_member_email ON team_members(email);
+
+-- ── ADMINS ───────────────────────────────────────────────────
+-- username is the login identifier (email or short handle).
+-- password_hash is a bcrypt hash (cost 10+).
+-- Populated at server startup by database.SeedAdmins() — idempotent.
+
+CREATE TABLE admins (
+    id             INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username       VARCHAR(150) UNIQUE NOT NULL,
+    password_hash  VARCHAR(255) NOT NULL,
+    created_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_admins_username ON admins(username);
 
 -- ── SEED DATA ────────────────────────────────────────────────
 

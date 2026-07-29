@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 	"time"
+
+	"entreverse/backend/database"
 
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Errors 
+// ── Errors ────────────────────────────────────────────────────────────────────
 
 var (
 	ErrInvalidCredentials = errors.New("invalid username or password")
@@ -20,56 +21,32 @@ var (
 	ErrMissingSecret      = errors.New("JWT_SECRET environment variable is not set")
 )
 
-// Admin store 
-// admins maps username → bcrypt hash.  Populated once at startup via Init.
-var admins map[string]string
-// Init loads admin credentials from ADMIN_CREDENTIALS and validates that
-// JWT_SECRET is set.  Call this once from main before serving requests.
+// ── Init ──────────────────────────────────────────────────────────────────────
+
+// Init validates that the JWT_SECRET is set.
+// Admin credentials are now stored in the database (loaded by database.SeedAdmins),
+// so no ADMIN_CREDENTIALS env var is required.
 func Init() error {
-	//  Load credentials from environment variable
-	raw := os.Getenv("ADMIN_CREDENTIALS")
-	if raw == "" {
-		return fmt.Errorf("ADMIN_CREDENTIALS environment variable is not set")
-	}
-
-	admins = make(map[string]string)
-	for _, pair := range strings.Split(raw, ",") {
-		pair = strings.TrimSpace(pair)
-		if pair == "" {
-			continue
-		}
-		idx := strings.Index(pair, ":")
-		if idx < 1 {
-			return fmt.Errorf("ADMIN_CREDENTIALS: malformed entry %q (expected user:hash)", pair)
-		}
-		username := pair[:idx]
-		hash := pair[idx+1:]
-		if username == "" || hash == "" {
-			return fmt.Errorf("ADMIN_CREDENTIALS: empty username or hash in entry %q", pair)
-		}
-		admins[username] = hash
-	}
-
-	if len(admins) == 0 {
-		return fmt.Errorf("ADMIN_CREDENTIALS: no valid credentials found")
-	}
-
-	//  Validate JWT secret is present 
 	if os.Getenv("JWT_SECRET") == "" {
 		return ErrMissingSecret
 	}
-
-	fmt.Printf("Auth: loaded %d admin account(s)\n", len(admins))
+	fmt.Println("Auth: JWT_SECRET loaded — admin credentials served from database")
 	return nil
 }
 
-// ValidateAdmin checks a plain-text password against the stored bcrypt hash.
-// Returns ErrInvalidCredentials on any mismatch (no info leakage).
+// ── Validate ──────────────────────────────────────────────────────────────────
+
+// ValidateAdmin checks a plain-text password against the bcrypt hash stored in
+// the admins table.  Returns ErrInvalidCredentials on any mismatch so no
+// information about whether the username exists is leaked.
 func ValidateAdmin(username, password string) error {
-	hash, ok := admins[username]
-	if !ok {
-		// Still run bcrypt to avoid timing-based username enumeration.
-		_ = bcrypt.CompareHashAndPassword([]byte("$2a$12$dummy"), []byte(password))
+	hash, err := database.GetAdminHash(username)
+	if err != nil {
+		// Username not found — run bcrypt anyway to prevent timing side-channel.
+		_ = bcrypt.CompareHashAndPassword(
+			[]byte("$2a$10$dummydummydummydummydummydummydummydummydummydummyd"),
+			[]byte(password),
+		)
 		return ErrInvalidCredentials
 	}
 	if err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)); err != nil {
@@ -78,8 +55,9 @@ func ValidateAdmin(username, password string) error {
 	return nil
 }
 
-// JWT 
+// ── JWT ───────────────────────────────────────────────────────────────────────
 
+// Claims is the payload stored inside each issued JWT.
 type Claims struct {
 	Username string `json:"username"`
 	jwt.RegisteredClaims
