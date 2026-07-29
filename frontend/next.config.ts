@@ -6,17 +6,10 @@ const nextConfig: NextConfig = {
   // node_modules tree.
   output: "standalone",
 
-  // All pages and assets are served under /entreverse on ecelliitk.org.
-  // e.g.  https://ecelliitk.org/entreverse/register
-  //        https://ecelliitk.org/entreverse/admin/login
-  basePath: "/entreverse",
-
-  // assetPrefix must match basePath so that JS/CSS chunks resolve correctly.
-  assetPrefix: "/entreverse",
-
   env: {
-    // Exposed to the browser — points to the Go backend.
-    // Override with NEXT_PUBLIC_API_URL in your Vercel project settings.
+    // Exposed to the browser — points to the Go backend on Railway.
+    // Set NEXT_PUBLIC_API_URL in your Vercel project environment variables.
+    // e.g. https://entreverse-backend-production.up.railway.app
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080",
   },
 };
