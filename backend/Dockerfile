@@ -18,9 +18,9 @@ RUN CGO_ENABLED=0 GOOS=linux go build \
 # ── Stage 2: Run ──────────────────────────────────────────────────────────────
 FROM alpine:3.20
 
-# ca-certificates: needed for TLS connections (e.g., cloud DB with SSL)
-# netcat-openbsd used to probe DB during startup; bash/sh is used for the wrapper
-RUN apk --no-cache add ca-certificates tzdata netcat-openbsd bash
+# ca-certificates: needed for TLS connections to cloud databases
+# tzdata: correct time zone handling
+RUN apk --no-cache add ca-certificates tzdata
 
 WORKDIR /app
 
@@ -33,6 +33,6 @@ EXPOSE 8080
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
-# Wait for Postgres to be reachable before starting the server to avoid DNS/startup races.
-# Using `nc -z` to probe the DB service name `postgres` on port 5432.
-CMD ["sh", "-c", "until nc -z postgres 5432; do sleep 1; done; ./server"]
+# Railway (and any other managed-DB host) provides DATABASE_URL directly —
+# no sidecar postgres to wait for.  Just run the binary.
+CMD ["./server"]

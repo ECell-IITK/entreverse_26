@@ -14,10 +14,38 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-//  CORS 
+// ── Security Headers ──────────────────────────────────────────────────────────
+
+// SecureHeaders sets recommended HTTP security headers on every response.
+// These are no-cost, defence-in-depth hardening applied at the middleware layer.
+func SecureHeaders() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// Prevent browsers from MIME-sniffing the content type.
+		c.Header("X-Content-Type-Options", "nosniff")
+		// Block clickjacking by denying iframe embedding from other origins.
+		c.Header("X-Frame-Options", "DENY")
+		// Enable browser XSS filter (legacy browsers).
+		c.Header("X-XSS-Protection", "1; mode=block")
+		// Only send the origin as referrer (no full URL path).
+		c.Header("Referrer-Policy", "strict-origin-when-cross-origin")
+		// Force HTTPS for 1 year (only meaningful when served over TLS).
+		if os.Getenv("GIN_MODE") == "release" {
+			c.Header("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+		}
+		// Restrict what browsers can load; APIs return JSON only.
+		c.Header("Content-Security-Policy",
+			"default-src 'none'; frame-ancestors 'none'")
+		// Remove the Go/Gin server fingerprint.
+		c.Header("Server", "")
+		c.Next()
+	}
+}
+
+// ── CORS ──────────────────────────────────────────────────────────────────────
 
 // CORS reads allowed origins from the ALLOWED_ORIGINS env var (comma-separated).
-// Localhost variants are always permitted when GIN_MODE != release.
+// In release mode, only those origins are permitted.
+// In non-release mode, localhost:3000 and localhost:5173 are also allowed.
 func CORS() gin.HandlerFunc {
 	rawOrigins := os.Getenv("ALLOWED_ORIGINS")
 	allowed := map[string]bool{}
@@ -51,7 +79,7 @@ func CORS() gin.HandlerFunc {
 	}
 }
 
-//  Logger 
+// ── Logger ────────────────────────────────────────────────────────────────────
 
 func Logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -67,7 +95,7 @@ func Logger() gin.HandlerFunc {
 	}
 }
 
-//  Rate limiter 
+// ── Rate limiter ──────────────────────────────────────────────────────────────
 
 type ipEntry struct {
 	mu        sync.Mutex
@@ -133,7 +161,7 @@ func RateLimit(limit int) gin.HandlerFunc {
 	}
 }
 
-// RequireAdmin 
+// ── RequireAdmin ──────────────────────────────────────────────────────────────
 
 // RequireAdmin validates the Bearer JWT in the Authorization header.
 // On success it sets "admin_username" in the Gin context for downstream handlers.
@@ -162,7 +190,7 @@ func RequireAdmin() gin.HandlerFunc {
 			return
 		}
 
-		// Make the authenticated username available to handlers
+		// Make the authenticated username available to handlers.
 		c.Set("admin_username", username)
 		c.Next()
 	}

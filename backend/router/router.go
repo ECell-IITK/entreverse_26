@@ -12,6 +12,7 @@ func SetupRouter() *gin.Engine {
 
 	r.Use(gin.Recovery())
 	r.Use(middleware.Logger())
+	r.Use(middleware.SecureHeaders())
 	r.Use(middleware.CORS())
 
 
