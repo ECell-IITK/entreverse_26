@@ -10,7 +10,7 @@
   --font-heading: var(--font-space-grotesk);
   --font-mono: var(--font-geist-mono);
 
-  /* Main Colors */
+  /* Main Colors — mapped to Tailwind utility classes */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
@@ -26,11 +26,11 @@
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
 
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 
   --color-destructive: var(--destructive);
 
@@ -38,77 +38,117 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Custom EntreVerse Colors */
+  /* Custom EntreVerse "Continuum of Innovation" Colors */
   --color-background-secondary: var(--background-secondary);
 
-  --color-accent-orange: var(--accent-orange);
-  --color-accent-blue: var(--accent-blue);
-  --color-accent-cyan: var(--accent-cyan);
+  /* Deep-blue stream (left/primary) */
+  --color-violet-core:   var(--violet-core);
+  --color-violet-bright: var(--violet-bright);
+  --color-magenta-hot:   var(--magenta-hot);
 
-  --color-text-primary: var(--text-primary);
+  /* Cyan-blue stream (right/accent) */
+  --color-blue-core:  var(--blue-core);
+  --color-blue-bright: var(--blue-bright);
+  --color-cyan-hot:   var(--cyan-hot);
+
+  /* Flare */
+  --color-line-white-hot: var(--line-white-hot);
+
+  /* Legacy aliases kept for backward compat with non-migrated admin pages */
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-blue:   var(--accent-blue);
+  --color-accent-cyan:   var(--accent-cyan);
+
+  --color-text-primary:   var(--text-primary);
   --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
+  --color-text-muted:     var(--text-muted);
 
   --color-border-glow: var(--border-glow);
 
   /* Radius */
-  --radius-sm: calc(var(--radius) * .6);
-  --radius-md: calc(var(--radius) * .8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-sm:  calc(var(--radius) * .6);
+  --radius-md:  calc(var(--radius) * .8);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
 }
+
 :root {
   color-scheme: dark;
 
   --radius: 1rem;
 
-  /* EntreVerse Theme */
+  /* ─── Base Voids ─────────────────────────────────────────── */
+  --background:           #080d1a;   /* lifted from near-black → visible deep navy */
+  --background-secondary: #050810;
 
-  --background: #07080f;
-  --background-secondary: #0d1021;
+  --foreground: #ffffff;
 
-  --foreground: #f8fafc;
+  /* ─── Cards / Popovers ───────────────────────────────────── */
+  --card:            #0d1635;        /* lifted navy card surface */
+  --card-foreground: #ffffff;
 
-  --card: #0d1021;
-  --card-foreground: #f8fafc;
+  --popover:            #0d1635;
+  --popover-foreground: #ffffff;
 
-  --popover: #0d1021;
-  --popover-foreground: #f8fafc;
-
-  --primary: #f97316;
+  /* ─── Primary = deep-blue stream (left) ─────────────────── */
+  --primary:            #1e3fff;     /* deep saturated blue */
   --primary-foreground: #ffffff;
 
-  --secondary: #1e40af;
+  /* ─── Secondary = mid-blue ───────────────────────────────── */
+  --secondary:            #3b6bff;
   --secondary-foreground: #ffffff;
 
-  --accent: #67e8f9;
-  --accent-foreground: #07080f;
+  /* ─── Accent = electric cyan-blue (right stream) ─────────── */
+  --accent:            #4fd8ff;
+  --accent-foreground: #05040f;
 
-  --muted: #111827;
-  --muted-foreground: #94a3b8;
+  --muted:            #0d1635;       /* lifted navy muted surface */
+  --muted-foreground: #d8e4ff;       /* bright blue-white body copy */
 
   --destructive: #ef4444;
 
-  --border: #1e293b;
-  --border-glow: #f9731622;
+  --border:      rgba(61, 107, 255, 0.18);   /* deep-blue grid-line */
+  --border-glow: rgba(30, 63, 255, 0.30);
 
-  --input: #1e293b;
-  --ring: #f97316;
+  --input: #0f1a40;
+  --ring:  #1e3fff;
 
-  /* Extra Colors */
+  /* ─── Continuum of Innovation: named tokens ─────────────── */
+  --bg-void:      #080d1a;
+  --bg-void-deep: #050810;
+  --nebula-haze:  #0d1635;           /* lifted navy haze */
 
+  /* Left stream — deep saturated blue family */
+  --violet-core:   #1e3fff;          /* deep blue  */
+  --violet-bright: #3d6bff;          /* brighter mid-blue */
+  --magenta-hot:   #5ec8ff;          /* electric light-blue highlight */
+
+  /* Right stream — electric cyan-blue (unchanged) */
+  --blue-core:   #3b6bff;
+  --blue-bright: #4fd8ff;
+  --cyan-hot:    #baf5ff;
+
+  --line-white-hot: #eaf4ff;
+
+  --grid-line:     rgba(61, 107, 255, 0.18);
+  --particle-dust: rgba(94, 200, 255, 0.40);
+
+  --text-primary:   #ffffff;         /* pure white headings */
+  --text-secondary: #d8e4ff;         /* bright blue-white body */
+  --text-muted:     #9fb3e8;         /* visible caption blue */
+
+  /* ─── Legacy aliases (kept for admin/register pages) ──────── */
   --accent-orange: #f97316;
-  --accent-blue: #1e40af;
-  --accent-cyan: #67e8f9;
-
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #475569;
+  --accent-blue:   #3b6bff;
+  --accent-cyan:   #4fd8ff;
 }
 
 
+/* ═══════════════════════════════════════════════════════════
+   BASE LAYER
+   ═══════════════════════════════════════════════════════════ */
 @layer base {
   * {
     @apply border-border;
@@ -125,25 +165,133 @@
     font-family: var(--font-inter);
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-space-grotesk);
   }
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY: GLASS PANEL
+   Deep-blue tinted border, stronger glow on hover
+   ═══════════════════════════════════════════════════════════ */
 .glass {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(13, 22, 53, 0.65);         /* lifted nebula-haze navy */
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(61, 107, 255, 0.25); /* slightly brighter border */
 
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    inset 0 1px rgba(255, 255, 255, 0.08);
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px rgba(94, 200, 255, 0.10);
 }
 
+/* hover — border jumps to cyan-hot, brighter inner gleam */
+.glass-hover:hover,
+.glass:hover {
+  border-color: rgba(94, 200, 255, 0.45);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px rgba(94, 200, 255, 0.14);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY: GRADIENT TEXT
+   Deep-blue → electric-cyan (no purple/magenta anywhere)
+   ═══════════════════════════════════════════════════════════ */
+.gradient-text {
+  background: linear-gradient(
+    90deg,
+    var(--violet-bright) 0%,   /* #3d6bff */
+    var(--magenta-hot)   45%,  /* #5ec8ff */
+    var(--blue-bright)   100%  /* #4fd8ff */
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Subtler cool variant for headings */
+.gradient-text-cool {
+  background: linear-gradient(
+    90deg,
+    var(--violet-bright) 0%,   /* #3d6bff */
+    var(--blue-bright)   100%  /* #4fd8ff */
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY: CTA GRADIENT BUTTON
+   Deep-blue → cyan, stronger neon glow
+   ═══════════════════════════════════════════════════════════ */
+.btn-continuum {
+  background: linear-gradient(
+    135deg,
+    var(--violet-core) 0%,   /* #1e3fff */
+    var(--blue-core)   100%  /* #3b6bff */
+  );
+  color: #fff;
+  /* Stronger glow — actually emits light */
+  box-shadow:
+    0 0 28px -4px rgba(30, 63, 255, 0.70),
+    0 0 60px -20px rgba(79, 216, 255, 0.40);
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
+}
+
+.btn-continuum:hover {
+  background: linear-gradient(
+    135deg,
+    var(--violet-bright) 0%,  /* #3d6bff */
+    var(--magenta-hot)   100% /* #5ec8ff */
+  );
+  box-shadow:
+    0 0 36px -3px rgba(61, 107, 255, 0.85),
+    0 0 80px -16px rgba(94, 200, 255, 0.60);
+  transform: scale(1.03);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATION: PULSE RING
+   Keyed to deep-blue, higher opacity for visibility
+   ═══════════════════════════════════════════════════════════ */
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0  0px rgba(30, 63, 255, 0.75); }
+  70%  { box-shadow: 0 0 0 16px rgba(30, 63, 255, 0);    }
+  100% { box-shadow: 0 0 0  0px rgba(30, 63, 255, 0);    }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2.4s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATION: FLOAT SOFT
+   ═══════════════════════════════════════════════════════════ */
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-10px); }
+}
+
+.animate-float-soft {
+  animation: float-soft 5s ease-in-out infinite;
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATION: SPIN helpers (InnovationCore rings)
+   ═══════════════════════════════════════════════════════════ */
+@keyframes spin-slow    { to { transform: rotate(360deg);  } }
+@keyframes spin-reverse { to { transform: rotate(-360deg); } }
+
+.spin-slow    { animation: spin-slow    26s linear infinite; }
+.spin-reverse { animation: spin-reverse 26s linear infinite; }
