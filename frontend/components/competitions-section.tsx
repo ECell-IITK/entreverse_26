@@ -8,7 +8,7 @@ const COMPETITIONS = [
     id: 'flip-the-future',
     number: '01',
     icon: TrendingUp,
-    tone: 'orange',
+    tone: 'violet',
     tag: 'Y25s · Investment',
     title: 'Flip the Future',
     description:
@@ -20,7 +20,7 @@ const COMPETITIONS = [
     id: 'strategy-showdown',
     number: '02',
     icon: Briefcase,
-    tone: 'cyan',
+    tone: 'magenta',
     tag: 'PGs · Business Strategy',
     title: 'The Strategy Showdown',
     description:
@@ -32,7 +32,7 @@ const COMPETITIONS = [
     id: 'startup-sprint',
     number: '03',
     icon: Zap,
-    tone: 'amber',
+    tone: 'blue',
     tag: 'All Teams · 24h Hackathon',
     title: 'Start-up Sprint',
     description:
@@ -42,54 +42,59 @@ const COMPETITIONS = [
   },
 ]
 
+// Three tones distributed across the three competitions.
+// All from the deep-blue → electric-cyan family — no purple/magenta.
+//  'deep'    = #1e3fff deep blue  (left-stream origin)
+//  'mid'     = #3d6bff / #5ec8ff  (stream midpoint)
+//  'blue'    = #3b6bff / #4fd8ff  (right-stream exit)
 const TONE_STYLES = {
-  orange: {
-    iconBg: 'bg-primary/15',
-    iconText: 'text-primary',
-    iconRing: 'ring-primary/25',
-    tagBg: 'bg-primary/10',
-    tagText: 'text-primary',
-    tagBorder: 'border-primary/20',
-    numText: 'text-primary/20',
-    glowBg: 'from-primary/20',
-    chipBg: 'bg-primary/10',
-    chipText: 'text-primary',
-    chipBorder: 'border-primary/20',
+  violet: {
+    iconBg:    'bg-[#1e3fff]/20',
+    iconText:  'text-[#5ec8ff]',
+    iconRing:  'ring-[#1e3fff]/35',
+    tagBg:     'bg-[#1e3fff]/12',
+    tagText:   'text-[#5ec8ff]',
+    tagBorder: 'border-[#1e3fff]/30',
+    numText:   'text-[#1e3fff]/30',
+    glowBg:    'from-[#1e3fff]/25',
+    chipBg:    'bg-[#1e3fff]/12',
+    chipText:  'text-[#5ec8ff]',
+    chipBorder:'border-[#1e3fff]/25',
     btnBg:
-      'bg-primary text-primary-foreground shadow-[0_0_24px_-6px_rgba(249,115,22,0.7)] hover:shadow-[0_0_32px_-4px_rgba(249,115,22,0.9)]',
-    accentLine: 'from-primary/60 via-primary/30 to-transparent',
+      'bg-gradient-to-r from-[#1e3fff] to-[#3d6bff] text-white shadow-[0_0_28px_-4px_rgba(30,63,255,0.75)] hover:shadow-[0_0_40px_-2px_rgba(61,107,255,0.9)]',
+    accentLine: 'from-[#1e3fff]/70 via-[#3d6bff]/40 to-transparent',
   },
-  cyan: {
-    iconBg: 'bg-accent/15',
-    iconText: 'text-accent',
-    iconRing: 'ring-accent/25',
-    tagBg: 'bg-accent/10',
-    tagText: 'text-accent',
-    tagBorder: 'border-accent/20',
-    numText: 'text-accent/20',
-    glowBg: 'from-accent/15',
-    chipBg: 'bg-accent/10',
-    chipText: 'text-accent',
-    chipBorder: 'border-accent/20',
+  magenta: {
+    iconBg:    'bg-[#3d6bff]/20',
+    iconText:  'text-[#5ec8ff]',
+    iconRing:  'ring-[#3d6bff]/35',
+    tagBg:     'bg-[#3d6bff]/12',
+    tagText:   'text-[#5ec8ff]',
+    tagBorder: 'border-[#3d6bff]/30',
+    numText:   'text-[#3d6bff]/30',
+    glowBg:    'from-[#5ec8ff]/20',
+    chipBg:    'bg-[#3d6bff]/12',
+    chipText:  'text-[#5ec8ff]',
+    chipBorder:'border-[#3d6bff]/25',
     btnBg:
-      'bg-accent text-accent-foreground shadow-[0_0_24px_-6px_rgba(103,232,249,0.55)] hover:shadow-[0_0_32px_-4px_rgba(103,232,249,0.8)]',
-    accentLine: 'from-accent/60 via-accent/30 to-transparent',
+      'bg-gradient-to-r from-[#3d6bff] to-[#5ec8ff] text-white shadow-[0_0_28px_-4px_rgba(94,200,255,0.65)] hover:shadow-[0_0_40px_-2px_rgba(94,200,255,0.9)]',
+    accentLine: 'from-[#3d6bff]/70 via-[#5ec8ff]/40 to-transparent',
   },
-  amber: {
-    iconBg: 'bg-amber-400/15',
-    iconText: 'text-amber-400',
-    iconRing: 'ring-amber-400/25',
-    tagBg: 'bg-amber-400/10',
-    tagText: 'text-amber-400',
-    tagBorder: 'border-amber-400/20',
-    numText: 'text-amber-400/20',
-    glowBg: 'from-amber-400/15',
-    chipBg: 'bg-amber-400/10',
-    chipText: 'text-amber-400',
-    chipBorder: 'border-amber-400/20',
+  blue: {
+    iconBg:    'bg-[#3b6bff]/20',
+    iconText:  'text-[#4fd8ff]',
+    iconRing:  'ring-[#3b6bff]/35',
+    tagBg:     'bg-[#3b6bff]/12',
+    tagText:   'text-[#4fd8ff]',
+    tagBorder: 'border-[#3b6bff]/30',
+    numText:   'text-[#3b6bff]/30',
+    glowBg:    'from-[#3b6bff]/25',
+    chipBg:    'bg-[#3b6bff]/12',
+    chipText:  'text-[#4fd8ff]',
+    chipBorder:'border-[#3b6bff]/25',
     btnBg:
-      'bg-gradient-to-r from-amber-400 to-orange-500 text-black shadow-[0_0_24px_-6px_rgba(251,191,36,0.7)] hover:shadow-[0_0_32px_-4px_rgba(251,191,36,0.9)]',
-    accentLine: 'from-amber-400/60 via-amber-400/30 to-transparent',
+      'bg-gradient-to-r from-[#3b6bff] to-[#4fd8ff] text-white shadow-[0_0_28px_-4px_rgba(59,107,255,0.75)] hover:shadow-[0_0_40px_-2px_rgba(79,216,255,0.9)]',
+    accentLine: 'from-[#3b6bff]/70 via-[#4fd8ff]/40 to-transparent',
   },
 } as const
 
@@ -125,10 +130,10 @@ export function CompetitionsSection() {
         <motion.h2
           variants={fade}
           custom={1}
-          className="text-balance font-heading text-4xl font-bold tracking-tight sm:text-5xl"
+          className="text-balance font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl"
         >
           Compete.{' '}
-          <span className="bg-gradient-to-r from-primary via-amber-400 to-accent bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#3d6bff] via-[#5ec8ff] to-[#4fd8ff] bg-clip-text text-transparent">
             Innovate.
           </span>{' '}
           Win.
@@ -137,7 +142,7 @@ export function CompetitionsSection() {
         <motion.p
           variants={fade}
           custom={2}
-          className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-muted-foreground"
+          className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-[#d8e4ff]"
         >
           Three high-stakes competitions designed to push boundaries, spark
           ideas, and reward the sharpest minds. Pick your arena.
@@ -199,7 +204,7 @@ export function CompetitionsSection() {
                   </h3>
 
                   {/* Description */}
-                  <p className="mt-3 max-w-2xl text-pretty leading-relaxed text-muted-foreground">
+                  <p className="mt-3 max-w-2xl text-pretty leading-relaxed text-[#d8e4ff]">
                     {comp.description}
                   </p>
 
@@ -242,16 +247,16 @@ export function CompetitionsSection() {
         className="glass mt-12 flex flex-col items-center justify-between gap-4 rounded-2xl px-8 py-6 sm:flex-row"
       >
         <div>
-          <p className="font-heading text-lg font-semibold">
+          <p className="font-heading text-lg font-semibold text-white">
             Not sure which competition to join?
           </p>
-          <p className="mt-0.5 text-sm text-muted-foreground">
+          <p className="mt-0.5 text-sm text-[#9fb3e8]">
             Register for all three — the more you compete, the more you grow.
           </p>
         </div>
         <a
           href="/register"
-          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-6 py-3 text-sm font-semibold text-black shadow-lg shadow-orange-500/20 transition-all hover:scale-[1.04] hover:shadow-orange-500/40"
+          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[#1e3fff] to-[#3b6bff] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#1e3fff]/30 transition-all hover:scale-[1.04] hover:from-[#3d6bff] hover:to-[#5ec8ff] hover:shadow-[#5ec8ff]/50"
         >
           Register Now
           <ArrowRight className="h-4 w-4" />

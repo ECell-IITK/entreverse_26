@@ -120,11 +120,11 @@ export function SiteFooter() {
           priority={false}
         />
         {/* Dark overlay so content stays readable */}
-        <div className="absolute inset-0 bg-[#07080f]/55" />
+        <div className="absolute inset-0 bg-[#080d1a]/60" />
         {/* Top fade — blends with the page above */}
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#07080f] to-transparent" />
-        {/* Ambient orange glow centre-bottom (matches original) */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_40%_at_50%_100%,rgba(249,115,22,0.09),transparent)]" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-[#080d1a] to-transparent" />
+        {/* Ambient deep-blue glow centre-bottom */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_40%_at_50%_100%,rgba(30,63,255,0.12),transparent)]" />
       </div>
 
       {/* ── Main footer body ── */}
@@ -144,23 +144,23 @@ export function SiteFooter() {
                 <img src= "/logo_ecell.png" alt="EntreVerse Logo" className="h-10 w-10" />
               </div>
               <div className="leading-none">
-                <p className="font-heading text-base font-bold">EntreVerse</p>
-                <p className="text-[10px] uppercase tracking-[0.26em] text-muted-foreground">
+                <p className="font-heading text-base font-bold text-white">EntreVerse</p>
+                <p className="text-xs uppercase tracking-[0.26em] text-[#9fb3e8]">
                   E-Cell IIT Kanpur
                 </p>
               </div>
             </a>
 
             {/* Tagline */}
-            <p className="text-sm leading-relaxed text-muted-foreground">
+            <p className="text-sm leading-relaxed text-[#d8e4ff]">
               Where ideas leave the ground and startups take orbit.
             </p>
 
             {/* Ideate · Innovate · Incubate */}
             <ul className="flex flex-col gap-1.5">
               {['Ideate', 'Innovate', 'Incubate'].map((word) => (
-                <li key={word} className="flex items-center gap-2.5 text-sm font-medium text-foreground/80">
-                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                <li key={word} className="flex items-center gap-2.5 text-sm font-medium text-white">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#3d6bff]" />
                   {word}
                 </li>
               ))}
@@ -186,7 +186,7 @@ export function SiteFooter() {
           {/* Col 2 & 3 — Nav columns */}
           {NAV_COLS.map((col, ci) => (
             <motion.div key={col.heading} variants={fade} custom={ci + 1}>
-              <h4 className="mb-4 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              <h4 className="mb-4 font-heading text-xs font-semibold uppercase tracking-[0.2em] text-[#5ec8ff]">
                 {col.heading}
               </h4>
               <ul className="flex flex-col gap-2.5">
@@ -196,7 +196,7 @@ export function SiteFooter() {
                       href={link.href}
                       target={'external' in link && link.external ? '_blank' : undefined}
                       rel={'external' in link && link.external ? 'noopener noreferrer' : undefined}
-                      className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+                      className="text-sm text-[#9fb3e8] transition-colors duration-200 hover:text-white"
                     >
                       {link.label}
                     </a>
@@ -208,27 +208,27 @@ export function SiteFooter() {
 
           {/* Col 4 — Newsletter */}
           <motion.div variants={fade} custom={3}>
-            <h4 className="mb-1 font-heading text-base font-semibold">
+            <h4 className="mb-1 font-heading text-base font-semibold text-white">
               Get Notified.
             </h4>
-            <p className="mb-5 text-sm leading-relaxed text-muted-foreground">
+            <p className="mb-5 text-sm leading-relaxed text-[#d8e4ff]">
               Be the first to know about the activities of E-Cell.
             </p>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-3" noValidate>
-              <div className="glass flex overflow-hidden rounded-xl border border-white/[0.08] focus-within:border-primary/40 focus-within:shadow-[0_0_0_3px_rgba(249,115,22,0.08)] transition-all duration-200">
+              <div className="glass flex overflow-hidden rounded-xl border border-[#3d6bff]/30 focus-within:border-[#5ec8ff]/60 focus-within:shadow-[0_0_0_3px_rgba(30,63,255,0.18)] transition-all duration-200">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => { setEmail(e.target.value); setStatus('idle') }}
                   placeholder="your@email.com"
                   required
-                  className="flex-1 bg-transparent px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none"
+                  className="flex-1 bg-transparent px-4 py-3 text-sm text-white placeholder:text-[#9fb3e8] focus:outline-none"
                 />
                 <button
                   type="submit"
                   aria-label="Subscribe"
-                  className="flex items-center justify-center px-4 text-accent transition-colors hover:text-primary"
+                  className="flex items-center justify-center px-4 text-[#5ec8ff] transition-colors hover:text-white"
                 >
                   <Send className="h-4 w-4" />
                 </button>
@@ -251,7 +251,7 @@ export function SiteFooter() {
               href="https://www.ecelliitk.org/"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-1.5 text-m text-muted-foreground transition-colors hover:text-foreground"
+              className="mt-8 inline-flex items-center gap-1.5 text-sm text-[#9fb3e8] transition-colors hover:text-white"
             >
               <img src="/logo_ecell.png" alt="E-Cell Logo" className="h-8 w-8" />
               ecelliitk.org
@@ -267,21 +267,21 @@ export function SiteFooter() {
 
       {/* ── Bottom bar ── */}
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5">
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm text-[#9fb3e8]">
           Made with{' '}
-          <Heart className="inline-block h-3 w-3 fill-primary text-primary align-[-2px]" />{' '}
+          <Heart className="inline-block h-3 w-3 fill-[#5ec8ff] text-[#5ec8ff] align-[-2px]" />{' '}
           by{' '}
           <a
             href="https://www.ecelliitk.org/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-foreground/70 transition-colors hover:text-foreground"
+            className="text-[#d8e4ff] transition-colors hover:text-white"
           >
             E-Cell, IIT Kanpur
           </a>
         </p>
 
-        <p className="hidden text-xs text-muted-foreground sm:block">
+        <p className="hidden text-sm text-[#9fb3e8] sm:block">
           EntreVerse 2026 · Where Ideas Become Impact
         </p>
 
@@ -289,7 +289,7 @@ export function SiteFooter() {
         <button
           onClick={scrollToTop}
           aria-label="Back to top"
-          className="glass flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-all duration-200 hover:scale-110 hover:border-primary/30 hover:text-primary"
+          className="glass flex h-9 w-9 items-center justify-center rounded-xl text-[#9fb3e8] transition-all duration-200 hover:scale-110 hover:border-[#3d6bff]/40 hover:text-white"
         >
           <ArrowUp className="h-4 w-4" />
         </button>

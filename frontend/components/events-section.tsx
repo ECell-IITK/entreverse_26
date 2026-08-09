@@ -54,36 +54,39 @@ const EVENTS: EventBlock[] = [
   },
 ]
 
+// Map event tones to the deep-blue → cyan stream:
+//  cyan   → right-stream  (#4fd8ff / #3b6bff)  — unchanged
+//  orange → left-stream   (#5ec8ff / #1e3fff)  — deep-blue replacing purple
 const TONE = {
   cyan: {
-    accent: 'text-accent',
-    accentBg: 'bg-accent/10',
-    accentRing: 'ring-accent/30',
-    accentBorder: 'border-accent/25',
-    glow: 'from-accent/15 via-accent/5',
-    glowStrong: 'shadow-accent/20',
-    dot: 'bg-accent',
-    line: 'from-accent/70 via-accent/30 to-transparent',
-    lineCenter: 'from-transparent via-accent/40 to-transparent',
-    badge: 'bg-accent/10 text-accent border-accent/25',
-    imageGlow: 'shadow-accent/30',
-    imageRing: 'ring-accent/40',
-    fallbackIcon: 'text-accent bg-accent/10',
+    accent:       'text-[#4fd8ff]',
+    accentBg:     'bg-[#3b6bff]/12',
+    accentRing:   'ring-[#3b6bff]/35',
+    accentBorder: 'border-[#3b6bff]/30',
+    glow:         'from-[#3b6bff]/18 via-[#3b6bff]/6',
+    glowStrong:   'shadow-[#3b6bff]/25',
+    dot:          'bg-[#4fd8ff]',
+    line:         'from-[#3b6bff]/75 via-[#3b6bff]/35 to-transparent',
+    lineCenter:   'from-transparent via-[#4fd8ff]/50 to-transparent',
+    badge:        'bg-[#3b6bff]/12 text-[#4fd8ff] border-[#3b6bff]/30',
+    imageGlow:    'shadow-[#3b6bff]/35',
+    imageRing:    'ring-[#3b6bff]/45',
+    fallbackIcon: 'text-[#4fd8ff] bg-[#3b6bff]/12',
   },
   orange: {
-    accent: 'text-primary',
-    accentBg: 'bg-primary/10',
-    accentRing: 'ring-primary/30',
-    accentBorder: 'border-primary/25',
-    glow: 'from-primary/15 via-primary/5',
-    glowStrong: 'shadow-primary/20',
-    dot: 'bg-primary',
-    line: 'from-primary/70 via-primary/30 to-transparent',
-    lineCenter: 'from-transparent via-primary/40 to-transparent',
-    badge: 'bg-primary/10 text-primary border-primary/25',
-    imageGlow: 'shadow-primary/30',
-    imageRing: 'ring-primary/40',
-    fallbackIcon: 'text-primary bg-primary/10',
+    accent:       'text-[#5ec8ff]',
+    accentBg:     'bg-[#1e3fff]/15',
+    accentRing:   'ring-[#1e3fff]/35',
+    accentBorder: 'border-[#1e3fff]/30',
+    glow:         'from-[#1e3fff]/18 via-[#3d6bff]/6',
+    glowStrong:   'shadow-[#1e3fff]/25',
+    dot:          'bg-[#5ec8ff]',
+    line:         'from-[#1e3fff]/75 via-[#3d6bff]/35 to-transparent',
+    lineCenter:   'from-transparent via-[#5ec8ff]/50 to-transparent',
+    badge:        'bg-[#1e3fff]/12 text-[#5ec8ff] border-[#1e3fff]/30',
+    imageGlow:    'shadow-[#1e3fff]/35',
+    imageRing:    'ring-[#1e3fff]/45',
+    fallbackIcon: 'text-[#5ec8ff] bg-[#1e3fff]/15',
   },
 }
 
@@ -125,8 +128,7 @@ function SpeakerCard({
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: '-40px' }}
-      className="group relative mx-auto w-full max-w-sm"
-    >
+      className="group relative mx-auto w-full max-w-sm"    >
       {/* Outer glow ring */}
       <div
         className={`absolute -inset-px rounded-3xl bg-gradient-to-b ${t.line} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
@@ -157,7 +159,7 @@ function SpeakerCard({
               priority
             />
             {/* Gradient overlay fading into card body */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#07080f] via-[#07080f]/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#05040f] via-[#05040f]/40 to-transparent" />
           </div>
 
           {/* Session badge — floats over bottom of image */}
@@ -229,13 +231,17 @@ function EventBlock({ event, blockIndex }: { event: EventBlock; blockIndex: numb
         </div>
 
         {/* Subtitle line */}
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-[#9fb3e8]">
           {event.type}
         </p>
       </div>
 
-      {/* Speaker cards — centered, max 2 cols, big cards */}
-      <div className="mx-auto grid max-w-3xl place-items-center gap-8 sm:grid-cols-2">
+      {/* Speaker cards — centered always; 2-col grid only when there are 2+ speakers */}
+      <div className={`mx-auto grid max-w-3xl gap-8 ${
+        event.speakers.length === 1
+          ? 'place-items-center'
+          : 'place-items-center sm:grid-cols-2'
+      }`}>
         {event.speakers.map((speaker, i) => (
           <SpeakerCard
             key={speaker.name}
@@ -266,17 +272,18 @@ export function EventsSection() {
           custom={0}
           className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-muted-foreground"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          {/* Use violet-bright dot to tie back to the stream */}
+          <span className="h-1.5 w-1.5 rounded-full bg-[#3d6bff]" />
           Sessions &amp; Workshops
         </motion.div>
 
         <motion.h2
           variants={fade}
           custom={1}
-          className="text-balance font-heading text-4xl font-bold tracking-tight sm:text-5xl"
+          className="text-balance font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl"
         >
           Learn from the{' '}
-          <span className="bg-gradient-to-r from-accent via-primary to-amber-400 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#3d6bff] via-[#5ec8ff] to-[#4fd8ff] bg-clip-text text-transparent">
             Best.
           </span>
         </motion.h2>
@@ -284,7 +291,7 @@ export function EventsSection() {
         <motion.p
           variants={fade}
           custom={2}
-          className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-muted-foreground"
+          className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-[#d8e4ff]"
         >
           Candid conversations, hands-on sessions, and real-world insights from
           founders, domain heads, and industry builders.
