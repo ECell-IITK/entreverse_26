@@ -53,7 +53,7 @@ func GetCompetitions(openOnly bool) ([]model.Competition, error) {
 	return out, rows.Err()
 }
 
-// getCompetitionRowByID returns the full internal row (including registration_code).
+// getCompetitionRowByID returns the full internal row (including registration_code hash).
 func getCompetitionRowByID(ctx context.Context, id int) (*model.CompetitionRow, error) {
 	var r model.CompetitionRow
 	err := DB.QueryRow(ctx,

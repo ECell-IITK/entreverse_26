@@ -122,12 +122,25 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	// 2. Validate registration code (constant-time)
-	if !secureEqual(req.RegistrationCode, comp.RegistrationCode) {
-		c.JSON(http.StatusForbidden, model.ErrorResponse{
-			Success: false, Error: "invalid registration code", Code: http.StatusForbidden,
-		})
-		return
+	// 2. Validate registration code (bcrypt or legacy plaintext)
+	// Support both bcrypt hashes ($2a$/$2b$/$2y$) and legacy plaintext for migration
+	codeHash := comp.RegistrationCode
+	if len(codeHash) > 4 && (codeHash[0:3] == "$2a" || codeHash[0:3] == "$2b" || codeHash[0:3] == "$2y") {
+		// bcrypt hash — use constant-time verification
+		if !database.VerifyRegistrationCode(codeHash, req.RegistrationCode) {
+			c.JSON(http.StatusForbidden, model.ErrorResponse{
+				Success: false, Error: "invalid registration code", Code: http.StatusForbidden,
+			})
+			return
+		}
+	} else {
+		// Legacy plaintext — constant-time compare
+		if !secureEqual(req.RegistrationCode, codeHash) {
+			c.JSON(http.StatusForbidden, model.ErrorResponse{
+				Success: false, Error: "invalid registration code", Code: http.StatusForbidden,
+			})
+			return
+		}
 	}
 
 	// 3. Check registration open

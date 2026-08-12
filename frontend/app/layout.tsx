@@ -21,11 +21,39 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://entreverse.ecelliitk.org'
+
 export const metadata: Metadata = {
-  title: 'EntreVerse 2026 — Where Ideas Become Impact',
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: 'EntreVerse 2026 — Where Ideas Become Impact',
+    template: '%s | EntreVerse 2026',
+  },
   description:
-    "EntreVerse 2026 is IIT Kanpur's flagship entrepreneurship festival. Three days of competitions, workshops, founder talks, and startup experiences. 15–17 August 2026.",
-  generator: 'v0.app',
+    "EntreVerse 2026 is IIT Kanpur's flagship entrepreneurship festival. Three days of competitions, workshops, founder talks, and startup experiences. 15–17 August 2026 at IIT Kanpur.",
+  keywords: ['EntreVerse', 'E-Cell IITK', 'IIT Kanpur', 'entrepreneurship', 'startup', 'hackathon', 'business competition', 'India'],
+  authors: [{ name: 'E-Cell IIT Kanpur', url: 'https://ecelliitk.org' }],
+  creator: 'E-Cell IIT Kanpur',
+  publisher: 'E-Cell IIT Kanpur',
+  formatDetection: { email: false, address: false, telephone: false },
+  openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    url: baseUrl,
+    siteName: 'EntreVerse 2026',
+    title: 'EntreVerse 2026 — Where Ideas Become Impact',
+    description: "IIT Kanpur's flagship entrepreneurship festival. 15–17 August 2026. Competitions, workshops, and startup experiences.",
+    images: [{ url: '/logo_ecell.png', width: 800, height: 600, alt: 'EntreVerse 2026' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'EntreVerse 2026 — Where Ideas Become Impact',
+    description: "IIT Kanpur's flagship entrepreneurship festival. 15–17 August 2026.",
+    images: ['/logo_ecell.png'],
+    creator: '@ecelliitk',
+  },
+  robots: { index: true, follow: true },
+  alternates: { canonical: baseUrl },
 }
 
 export const viewport: Viewport = {

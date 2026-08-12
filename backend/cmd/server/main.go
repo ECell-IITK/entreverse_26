@@ -37,6 +37,11 @@ func main() {
 		log.Fatalf("Admin seeding failed: %v", err)
 	}
 
+	// Migrate plaintext registration codes to bcrypt (idempotent)
+	if err := database.MigratePlainCodes(context.Background()); err != nil {
+		log.Printf("Warning: code migration failed (non-fatal): %v", err)
+	}
+
 	//── HTTP server 
 	port := os.Getenv("PORT")
 	if port == "" {

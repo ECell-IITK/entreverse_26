@@ -77,11 +77,18 @@ func GetAllTeamsForEvent(eventID int) ([]model.TeamSummary, error) {
 }
 
 // CreateCompetition inserts a new competition and returns its ID.
+// Registration codes are hashed with bcrypt before storage.
 func CreateCompetition(req model.CreateCompetitionRequest) (int, error) {
 	ctx := context.Background()
 
+	// Hash the registration code before storing
+	codeHash, err := HashRegistrationCode(req.RegistrationCode)
+	if err != nil {
+		return 0, fmt.Errorf("hash registration code: %w", err)
+	}
+
 	var id int
-	err := DB.QueryRow(ctx, `
+	err = DB.QueryRow(ctx, `
 		INSERT INTO competitions
 			(event_id, name, slug, description, max_team_size, min_team_size,
 			 registration_open, registration_code)
@@ -89,7 +96,7 @@ func CreateCompetition(req model.CreateCompetitionRequest) (int, error) {
 		RETURNING id`,
 		req.EventID, req.Name, req.Slug, req.Description,
 		req.MaxTeamSize, req.MinTeamSize,
-		req.RegistrationOpen, req.RegistrationCode,
+		req.RegistrationOpen, codeHash,
 	).Scan(&id)
 	if err != nil {
 		if isDuplicateKeyError(err) {
@@ -131,7 +138,7 @@ func GetAllTeams() ([]model.TeamSummary, error) {
 }
 
 // UpdateCompetition patches name, description, sizes, registration_open, and optionally
-// the registration_code (only if req.RegistrationCode != "").
+// the registration_code (only if req.RegistrationCode != ""). Codes are hashed before storage.
 func UpdateCompetition(id int, req model.UpdateCompetitionRequest) (*model.Competition, error) {
 	ctx := context.Background()
 
@@ -139,6 +146,11 @@ func UpdateCompetition(id int, req model.UpdateCompetitionRequest) (*model.Compe
 	// We always update the scalar fields; code only if provided.
 	var err error
 	if req.RegistrationCode != "" {
+		// Hash the new code before storing
+		codeHash, hashErr := HashRegistrationCode(req.RegistrationCode)
+		if hashErr != nil {
+			return nil, fmt.Errorf("hash registration code: %w", hashErr)
+		}
 		_, err = DB.Exec(ctx, `
 			UPDATE competitions
 			SET name              = $1,
@@ -150,7 +162,7 @@ func UpdateCompetition(id int, req model.UpdateCompetitionRequest) (*model.Compe
 			WHERE id = $7`,
 			req.Name, req.Description,
 			req.MaxTeamSize, req.MinTeamSize,
-			req.RegistrationOpen, req.RegistrationCode,
+			req.RegistrationOpen, codeHash,
 			id,
 		)
 	} else {
