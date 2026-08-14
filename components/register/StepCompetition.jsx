@@ -1,6 +1,7 @@
 'use client'
 
-import { ArrowRight, Loader2, AlertCircle, Users, Trophy } from 'lucide-react'
+import Link from 'next/link'
+import { ArrowRight, ArrowLeft, Loader2, AlertCircle, Users, Trophy } from 'lucide-react'
 
 export default function StepCompetition({
   competitions,
@@ -29,11 +30,11 @@ export default function StepCompetition({
         </p>
       </div>
 
-      {loading ? (
-        <div className="flex items-center justify-center py-16">
+      {loading && (!competitions || competitions.length === 0) ? (
+        <div className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
-      ) : fetchError ? (
+      ) : fetchError && (!competitions || competitions.length === 0) ? (
         <div className="flex flex-col items-center gap-3 rounded-2xl border border-destructive/20 bg-destructive/5 px-6 py-12 text-center">
           <AlertCircle className="h-8 w-8 text-destructive" />
           <p className="text-sm text-muted-foreground">{fetchError}</p>
@@ -51,7 +52,7 @@ export default function StepCompetition({
                 type="button"
                 onClick={() => handleSelect(c.id)}
                 className={`
-                  group relative w-full overflow-hidden rounded-2xl border p-5 text-left transition-all duration-300
+                  group relative w-full overflow-hidden rounded-2xl border p-5 text-left transition-all duration-200
                   ${active
                     ? 'border-primary/50 bg-primary/10 shadow-[0_0_24px_-8px_rgba(249,115,22,0.5)]'
                     : 'border-white/[0.07] bg-white/[0.03] hover:border-primary/25 hover:bg-white/[0.06]'
@@ -100,14 +101,23 @@ export default function StepCompetition({
         </div>
       )}
 
-      <button
-        type="button"
-        onClick={handleNext}
-        disabled={!form.competitionId}
-        className="self-end inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-[0_0_20px_-6px_rgba(249,115,22,0.7)] transition-all duration-200 hover:scale-[1.03] hover:shadow-[0_0_28px_-4px_rgba(249,115,22,0.9)] disabled:opacity-40 disabled:pointer-events-none"
-      >
-        Continue <ArrowRight className="h-4 w-4" />
-      </button>
+      <div className="flex items-center justify-between pt-2">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-3 text-sm font-medium text-muted-foreground hover:bg-white/[0.08] hover:text-foreground transition-all duration-200"
+        >
+          <ArrowLeft className="h-4 w-4" /> Back to Home
+        </Link>
+
+        <button
+          type="button"
+          onClick={handleNext}
+          disabled={!form.competitionId}
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white shadow-[0_0_20px_-6px_rgba(249,115,22,0.7)] transition-all duration-200 hover:scale-[1.03] hover:shadow-[0_0_28px_-4px_rgba(249,115,22,0.9)] disabled:opacity-40 disabled:pointer-events-none"
+        >
+          Continue <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
     </div>
   )
 }

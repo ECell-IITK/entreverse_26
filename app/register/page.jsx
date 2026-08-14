@@ -2,8 +2,9 @@
 
 import { useEffect, useState, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { motion, AnimatePresence } from 'motion/react'
-import { Loader2, Sparkles } from 'lucide-react'
+import { Loader2, Sparkles, ArrowLeft } from 'lucide-react'
 import { getCompetitionsByEvent, registerTeam } from '@/lib/api'
 import StepBar from '@/components/register/StepBar'
 import StepCompetition from '@/components/register/StepCompetition'
@@ -13,6 +14,42 @@ import StepSuccess from '@/components/register/StepSuccess'
 
 const EVENT_SLUG = 'entreverse-2026'
 
+const DEFAULT_COMPETITIONS = [
+  {
+    id: 1,
+    event_id: 1,
+    name: 'Flip the Future',
+    slug: 'flip-the-future',
+    description:
+      'Strategic decision-making and smart investments are the keys to this challenge. Teams (preferably Y25s) will bid for the most promising opportunities from a set of firms, using provided summaries to evaluate options and outsmart competitors.',
+    max_team_size: 4,
+    min_team_size: 2,
+    registration_open: true,
+  },
+  {
+    id: 2,
+    event_id: 1,
+    name: 'The Strategy Showdown',
+    slug: 'strategy-showdown',
+    description:
+      'An opportunity to dive into the world of entrepreneurship, this challenge invites participants (preferably PGs) to step into the shoes of business innovators. Teams will explore real-world problems in different domains of business.',
+    max_team_size: 4,
+    min_team_size: 2,
+    registration_open: true,
+  },
+  {
+    id: 3,
+    event_id: 1,
+    name: 'Start-up Sprint',
+    slug: 'startup-sprint',
+    description:
+      '"One Day One Idea Infinite Potential" — An intense full day challenge where teams transform ideas into MVPs and prototypes before sunrise.',
+    max_team_size: 5,
+    min_team_size: 1,
+    registration_open: true,
+  },
+]
+
 const EMPTY_MEMBER = () => ({
   name: '', roll_no: '', email: '', phone: '', is_leader: false,
 })
@@ -20,8 +57,8 @@ const EMPTY_MEMBER = () => ({
 function RegisterPageInner() {
   const searchParams = useSearchParams()
 
-  const [competitions, setCompetitions] = useState([])
-  const [loadingComps, setLoadingComps] = useState(true)
+  const [competitions, setCompetitions] = useState(DEFAULT_COMPETITIONS)
+  const [loadingComps, setLoadingComps] = useState(false)
   const [fetchError, setFetchError] = useState(null)
 
   const [step, setStep] = useState(1)
@@ -30,29 +67,34 @@ function RegisterPageInner() {
   const [successTeamId, setSuccessTeamId] = useState(null)
 
   const [form, setForm] = useState({
-    competitionId: null,
+    competitionId: 1, // Default selected
     teamName: '',
     comments: '',
     members: [{ ...EMPTY_MEMBER(), is_leader: true }],
   })
 
-  // Load competitions from API
+  // Load live competitions in background
   useEffect(() => {
-    setLoadingComps(true)
+    const slug = searchParams.get('competition')
+    if (slug) {
+      const match = DEFAULT_COMPETITIONS.find((c) => c.slug === slug)
+      if (match) setForm((f) => ({ ...f, competitionId: match.id }))
+    }
+
     getCompetitionsByEvent(EVENT_SLUG, true)
       .then((data) => {
-        setCompetitions(data || [])
-        const slug = searchParams.get('competition')
-        if (slug) {
-          const match = (data || []).find((c) => c.slug === slug)
-          if (match) setForm((f) => ({ ...f, competitionId: match.id }))
+        if (data && data.length > 0) {
+          setCompetitions(data)
+          if (slug) {
+            const match = data.find((c) => c.slug === slug)
+            if (match) setForm((f) => ({ ...f, competitionId: match.id }))
+          }
         }
       })
-      .catch((err) => setFetchError(err.message || 'Failed to load competitions'))
-      .finally(() => setLoadingComps(false))
+      .catch((err) => console.warn('Background competition sync note:', err.message))
   }, [searchParams])
 
-  const selectedComp = competitions.find((c) => c.id === form.competitionId) || null
+  const selectedComp = competitions.find((c) => c.id === form.competitionId) || DEFAULT_COMPETITIONS[0]
 
   useEffect(() => {
     if (!selectedComp) return
@@ -86,9 +128,9 @@ function RegisterPageInner() {
   }, [form, selectedComp])
 
   const slideVariants = {
-    enter: (dir) => ({ opacity: 0, x: dir * 40 }),
+    enter: (dir) => ({ opacity: 0, x: dir * 30 }),
     center: { opacity: 1, x: 0 },
-    exit: (dir) => ({ opacity: 0, x: dir * -40 }),
+    exit: (dir) => ({ opacity: 0, x: dir * -30 }),
   }
   const [dir, setDir] = useState(1)
   const goNext = () => { setDir(1); setStep((s) => s + 1) }
@@ -101,32 +143,48 @@ function RegisterPageInner() {
         <div className="absolute bottom-0 right-1/4 h-[400px] w-[400px] translate-x-1/2 rounded-full bg-accent/[0.04] blur-[100px]" />
       </div>
 
+      {/* Header with Navigation */}
       <header className="sticky top-0 z-40 border-b border-white/[0.06] bg-background/80 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <a href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
-            <div className="flex h-9 w-9 items-center justify-center">
-              <img src="/logo_ecell.png" alt="EntreVerse Logo" className="h-10 w-10" />
-            </div>
-            <div className="leading-none">
-              <p className="font-heading text-sm font-bold">EntreVerse</p>
-              <p className="text-[9px] uppercase tracking-[0.24em] text-muted-foreground">E-Cell IIT Kanpur</p>
-            </div>
-          </a>
+        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3.5">
+          <div className="flex items-center gap-3 sm:gap-5">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-muted-foreground hover:bg-white/10 hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              <span>Home</span>
+            </Link>
+
+            <Link href="/" className="group flex items-center gap-2.5 transition-opacity hover:opacity-90">
+              <div className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center shrink-0">
+                <img
+                  src="/logo_ecell.png"
+                  alt="Entrepreneurship Cell IIT Kanpur Logo"
+                  className="h-full w-full object-contain drop-shadow-[0_0_8px_rgba(94,200,255,0.4)]"
+                />
+              </div>
+              <div className="hidden sm:flex flex-col justify-center leading-none">
+                <p className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-primary transition-colors">
+                  Entrepreneurship Cell
+                </p>
+                <p className="text-[9px] sm:text-[10px] font-semibold tracking-[0.14em] text-[#5ec8ff] mt-0.5">
+                  IIT Kanpur
+                </p>
+              </div>
+            </Link>
+          </div>
+
           {step < 4 && <StepBar current={step} />}
         </div>
       </header>
 
-      <main className="mx-auto max-w-2xl px-4 py-12 sm:py-16">
+      <main className="mx-auto max-w-2xl px-4 py-10 sm:py-14">
         {step < 4 && (
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mb-10 text-center"
-          >
-            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-sm font-semibold uppercase tracking-widest text-primary">
-              <Sparkles className="h-6 w-6" /> EntreVerse 2026 Registration
+          <div className="mb-8 text-center">
+            <span className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-primary">
+              <Sparkles className="h-4 w-4" /> EntreVerse 2026 Registration
             </span>
-          </motion.div>
+          </div>
         )}
 
         <div
@@ -143,7 +201,7 @@ function RegisterPageInner() {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.28, ease: [0.32, 0.72, 0, 1] }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
             >
               {step === 1 && (
                 <StepCompetition

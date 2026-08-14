@@ -1,7 +1,7 @@
 # EntreVerse 2026
 
 **Flagship Entrepreneurship Festival of E-Cell, IIT Kanpur**  
-*August 15–17, 2026 · IIT Kanpur*
+*August 29–30, 2026 · IIT Kanpur*
 
 ---
 
@@ -9,7 +9,7 @@
 
 - **Unified Framework**: [Next.js](https://nextjs.org/) (App Router, Node.js runtime)
 - **Language**: Pure JavaScript / JSX (`ES2022+`)
-- **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/)
+- **Database**: [MongoDB Atlas](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/)
 - **Authentication**: JWT (`jsonwebtoken`) + `bcryptjs`
 - **Styling**: Tailwind CSS, CSS Tokens, Motion (`motion/react`), Lucide React
 - **Architecture**: Single unified Next.js folder (Frontend UI + Backend `/api` Routes + MongoDB Models)
@@ -75,8 +75,8 @@ entreverse_26/
 The project comes preconfigured with `.env.local`:
 
 ```env
-# MongoDB Connection URI
-MONGODB_URI=mongodb://127.0.0.1:27017/entreverse
+# MongoDB Connection URI (MongoDB Atlas Online)
+MONGODB_URI=mongodb+srv://mohit862006_db_user:Mohit@cluster0.qq4vzgh.mongodb.net/entreverse?retryWrites=true&w=majority&appName=Cluster0
 
 # JWT Secret
 JWT_SECRET=entreverse-2026-super-secret-jwt-key-change-in-production
@@ -118,19 +118,19 @@ The database automatically seeds the initial event, competitions, and admin acco
 | Username | Default Password | Role |
 | :--- | :--- | :--- |
 | `admin` | `Admin@IITK2026` | Root Administrator |
-| `rajc25@iitk.ac.in` | *(Pre-hashed in seed)* | Festival Admin |
-| `anand@ecelliitk.com` | *(Pre-hashed in seed)* | Festival Admin |
-| `hirani@ecelliitk.com` | *(Pre-hashed in seed)* | Festival Admin |
-| `mohit@ecell.com` | *(Pre-hashed in seed)* | Festival Admin |
-| `ecell@iitk.ac.in` | *(Pre-hashed in seed)* | Festival Admin |
+| `rajc25@iitk.ac.in` | `Admin@IITK2026` | Festival Admin |
+| `anand@ecelliitk.com` | `Admin@IITK2026` | Festival Admin |
+| `hirani@ecelliitk.com` | `Admin@IITK2026` | Festival Admin |
+| `mohit@ecell.com` | `Admin@IITK2026` | Festival Admin |
+| `ecell@iitk.ac.in` | `Admin@IITK2026` | Festival Admin |
 
 ---
 
-## 🏆 Default Competitions & Secret Registration Codes
+## 🏆 Flagship Competitions
 
-1. **Flip the Future** (`flip-the-future`): `FTF-2026-SECRET`
-2. **The Strategy Showdown** (`strategy-showdown`): `TSS-2026-SECRET`
-3. **Start-up Sprint** (`startup-sprint`): `SUS-2026-SECRET`
+1. **Flip the Future** (`flip-the-future`)
+2. **The Strategy Showdown** (`strategy-showdown`)
+3. **Start-up Sprint** (`startup-sprint`)
 
 ---
 
@@ -144,7 +144,7 @@ The database automatically seeds the initial event, competitions, and admin acco
 - `GET /api/competitions` — List all competitions
 - `GET /api/competitions/[id]` — Competition by numeric ID
 - `GET /api/competitions/slug/[slug]` — Competition by slug
-- `POST /api/register` — Register a team with member validation and secret code
+- `POST /api/register` — Register a team
 - `GET /api/registrations/[team_id]` — Retrieve registration receipt
 
 ### Admin Endpoints (`Authorization: Bearer <token>`)
@@ -152,6 +152,6 @@ The database automatically seeds the initial event, competitions, and admin acco
 - `GET /api/admin/teams` — View all registered teams
 - `GET /api/admin/teams/[team_id]` — Detailed team roster and contact information
 - `POST /api/admin/competitions` — Create competition
-- `PATCH /api/admin/competitions/[id]` — Update competition settings & codes
+- `PATCH /api/admin/competitions/[id]` — Update competition settings
 - `POST /api/admin/events` — Create event
 - `PATCH /api/admin/events/[id]` — Update event details

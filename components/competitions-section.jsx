@@ -9,11 +9,11 @@ const COMPETITIONS = [
     number: '01',
     icon: TrendingUp,
     tone: 'violet',
-    tag: 'Y25s · Investment',
+    tag: 'Y25s · Investment & Bidding',
     title: 'Flip the Future',
     description:
-      'Strategic decision-making and smart investments are the keys to this challenge. Teams (preferably Y25s) will bid for the most promising opportunities from a set of firms, using provided summaries to evaluate options and outsmart competitors. Shortlisted teams will advance to the finale to present their portfolios and compete for exciting prizes.',
-    highlights: ['Portfolio Building', 'Competitive Bidding', 'Finale Presentations'],
+      'Strategic decision-making and smart investments. Evaluate promising firms, outbid competitors, and build winning portfolios.',
+    highlights: ['Portfolio Building', 'Competitive Bidding', 'Grand Finale'],
     registerHref: '/register?competition=flip-the-future',
   },
   {
@@ -24,8 +24,8 @@ const COMPETITIONS = [
     tag: 'PGs · Business Strategy',
     title: 'The Strategy Showdown',
     description:
-      'An opportunity to dive into the world of entrepreneurship, this challenge invites participants (preferably PGs) to step into the shoes of business innovators. Teams will explore real-world problems in different domains of business, unleash their creativity, and craft impactful solutions to transform problems into opportunities.',
-    highlights: ['Real-World Problems', 'Cross-Domain Business', 'Creative Solutions'],
+      'Step into the shoes of business innovators. Tackle real-world industry challenges and craft high-impact enterprise solutions.',
+    highlights: ['Case Studies', 'Domain Innovation', 'Strategic Pitch'],
     registerHref: '/register?competition=strategy-showdown',
   },
   {
@@ -36,8 +36,8 @@ const COMPETITIONS = [
     tag: 'All Teams · 24h Hackathon',
     title: 'Start-up Sprint',
     description:
-      '"One Day One Idea Infinite Potential" — An intense full day challenge where teams transform ideas into MVPs and prototypes before sunrise. From brainstorming to building, every hour tests creativity, speed, and strategy. The most promising solutions will pitch at dawn for a chance to win big.',
-    highlights: ['Idea to MVP', 'Full-Day Sprint', 'Pitch at Dawn'],
+      '"One Day One Idea Infinite Potential" — An intense 24-hour sprint transforming ideas into functional MVPs and prototypes.',
+    highlights: ['Idea to MVP', '24h Build Sprint', 'Dawn Demo Day'],
     registerHref: '/register?competition=startup-sprint',
   },
 ]
@@ -56,7 +56,7 @@ const TONE_STYLES = {
     chipText: 'text-[#5ec8ff]',
     chipBorder: 'border-[#1e3fff]/25',
     btnBg:
-      'bg-gradient-to-r from-[#1e3fff] to-[#3d6bff] text-white shadow-[0_0_28px_-4px_rgba(30,63,255,0.75)] hover:shadow-[0_0_40px_-2px_rgba(61,107,255,0.9)]',
+      'bg-gradient-to-r from-[#1e3fff] to-[#3d6bff] text-white shadow-[0_0_24px_-4px_rgba(30,63,255,0.75)] hover:shadow-[0_0_36px_-2px_rgba(61,107,255,0.9)]',
     accentLine: 'from-[#1e3fff]/70 via-[#3d6bff]/40 to-transparent',
   },
   magenta: {
@@ -72,7 +72,7 @@ const TONE_STYLES = {
     chipText: 'text-[#5ec8ff]',
     chipBorder: 'border-[#3d6bff]/25',
     btnBg:
-      'bg-gradient-to-r from-[#3d6bff] to-[#5ec8ff] text-white shadow-[0_0_28px_-4px_rgba(94,200,255,0.65)] hover:shadow-[0_0_40px_-2px_rgba(94,200,255,0.9)]',
+      'bg-gradient-to-r from-[#3d6bff] to-[#5ec8ff] text-white shadow-[0_0_24px_-4px_rgba(94,200,255,0.65)] hover:shadow-[0_0_36px_-2px_rgba(94,200,255,0.9)]',
     accentLine: 'from-[#3d6bff]/70 via-[#5ec8ff]/40 to-transparent',
   },
   blue: {
@@ -88,33 +88,33 @@ const TONE_STYLES = {
     chipText: 'text-[#4fd8ff]',
     chipBorder: 'border-[#3b6bff]/25',
     btnBg:
-      'bg-gradient-to-r from-[#3b6bff] to-[#4fd8ff] text-white shadow-[0_0_28px_-4px_rgba(59,107,255,0.75)] hover:shadow-[0_0_40px_-2px_rgba(79,216,255,0.9)]',
+      'bg-gradient-to-r from-[#3b6bff] to-[#4fd8ff] text-white shadow-[0_0_24px_-4px_rgba(59,107,255,0.75)] hover:shadow-[0_0_36px_-2px_rgba(79,216,255,0.9)]',
     accentLine: 'from-[#3b6bff]/70 via-[#4fd8ff]/40 to-transparent',
   },
 }
 
 const fade = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 15 },
   show: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.14 },
+    transition: { duration: 0.35, delay: i * 0.05, ease: 'easeOut' },
   }),
 }
 
 export function CompetitionsSection() {
   return (
-    <section id="competitions" className="relative mx-auto max-w-6xl px-4 py-28">
+    <section id="competitions" className="relative mx-auto max-w-6xl px-4 py-16 sm:py-20">
       <motion.div
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, margin: '-80px' }}
+        viewport={{ once: true, margin: '150px 0px' }}
         className="mx-auto max-w-2xl text-center"
       >
         <motion.h2
           variants={fade}
           custom={1}
-          className="text-balance font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl"
+          className="text-balance font-heading text-3xl font-bold tracking-tight text-white sm:text-4xl"
         >
           Compete.{' '}
           <span className="bg-gradient-to-r from-[#3d6bff] via-[#5ec8ff] to-[#4fd8ff] bg-clip-text text-transparent">
@@ -126,14 +126,13 @@ export function CompetitionsSection() {
         <motion.p
           variants={fade}
           custom={2}
-          className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-[#d8e4ff]"
+          className="mx-auto mt-2.5 max-w-xl text-pretty text-xs sm:text-sm leading-relaxed text-[#d8e4ff]"
         >
-          Three high-stakes competitions designed to push boundaries, spark
-          ideas, and reward the sharpest minds. Pick your arena.
+          Three flagship tracks designed to test vision, execution, and strategy.
         </motion.p>
       </motion.div>
 
-      <div className="mt-16 flex flex-col gap-6">
+      <div className="mt-10 flex flex-col gap-4 sm:gap-5">
         {COMPETITIONS.map((comp, i) => {
           const t = TONE_STYLES[comp.tone]
           const Icon = comp.icon
@@ -144,66 +143,63 @@ export function CompetitionsSection() {
               custom={i}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true, margin: '-60px' }}
-              className="glass group relative overflow-hidden rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl hover:shadow-black/40 sm:p-8 lg:p-10"
+              viewport={{ once: true, margin: '150px 0px' }}
+              className="glass group relative overflow-hidden rounded-2xl p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl sm:p-7"
             >
               <div
-                className={`pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br ${t.glowBg} to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+                className={`pointer-events-none absolute inset-0 -z-10 bg-gradient-to-br ${t.glowBg} to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
               />
 
               <div
                 className={`absolute left-0 right-0 top-0 h-px bg-gradient-to-r ${t.accentLine}`}
               />
 
-              <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-10">
-                <div className="flex shrink-0 items-start gap-4 lg:flex-col lg:items-center">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-start gap-4">
                   <div
-                    className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${t.iconBg} ${t.iconText} ring-1 ${t.iconRing}`}
+                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${t.iconBg} ${t.iconText} ring-1 ${t.iconRing}`}
                   >
-                    <Icon className="h-6 w-6" />
+                    <Icon className="h-5 w-5" />
                   </div>
-                  <span
-                    className={`font-heading text-5xl font-black leading-none ${t.numText} lg:text-6xl`}
-                  >
-                    {comp.number}
-                  </span>
-                </div>
 
-                <div className="flex-1">
-                  <span
-                    className={`inline-flex items-center rounded-lg border px-2.5 py-1 text-xs font-medium ${t.tagBg} ${t.tagText} ${t.tagBorder}`}
-                  >
-                    {comp.tag}
-                  </span>
-
-                  <h3 className="mt-3 font-heading text-2xl font-bold tracking-tight sm:text-3xl">
-                    {comp.title}
-                  </h3>
-
-                  <p className="mt-3 max-w-2xl text-pretty leading-relaxed text-[#d8e4ff]">
-                    {comp.description}
-                  </p>
-
-                  <ul className="mt-5 flex flex-wrap gap-2">
-                    {comp.highlights.map((h) => (
-                      <li
-                        key={h}
-                        className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-medium ${t.chipBg} ${t.chipText} ${t.chipBorder}`}
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-medium ${t.tagBg} ${t.tagText} ${t.tagBorder}`}
                       >
-                        <span className={`h-1 w-1 rounded-full ${t.iconText} opacity-70`} />
-                        {h}
-                      </li>
-                    ))}
-                  </ul>
+                        {comp.tag}
+                      </span>
+                    </div>
+
+                    <h3 className="mt-1.5 font-heading text-xl font-bold tracking-tight sm:text-2xl">
+                      {comp.title}
+                    </h3>
+
+                    <p className="mt-1 max-w-xl text-xs sm:text-sm leading-relaxed text-[#d8e4ff]">
+                      {comp.description}
+                    </p>
+
+                    <ul className="mt-3 flex flex-wrap gap-1.5">
+                      {comp.highlights.map((h) => (
+                        <li
+                          key={h}
+                          className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-medium ${t.chipBg} ${t.chipText} ${t.chipBorder}`}
+                        >
+                          <span className={`h-1 w-1 rounded-full ${t.iconText} opacity-70`} />
+                          {h}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
-                <div className="flex shrink-0 items-center lg:items-end lg:self-end">
+                <div className="shrink-0 pt-2 sm:pt-0">
                   <a
                     href={comp.registerHref}
-                    className={`group/btn inline-flex items-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold transition-all duration-300 hover:scale-[1.04] ${t.btnBg}`}
+                    className={`group/btn w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-xs sm:text-sm font-semibold transition-all duration-200 hover:scale-[1.02] ${t.btnBg}`}
                   >
-                    Register Now
-                    <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                    Register
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/btn:translate-x-0.5" />
                   </a>
                 </div>
               </div>
@@ -211,30 +207,6 @@ export function CompetitionsSection() {
           )
         })}
       </div>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-40px' }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="glass mt-12 flex flex-col items-center justify-between gap-4 rounded-2xl px-8 py-6 sm:flex-row"
-      >
-        <div>
-          <p className="font-heading text-lg font-semibold text-white">
-            Not sure which competition to join?
-          </p>
-          <p className="mt-0.5 text-sm text-[#9fb3e8]">
-            Register for all three — the more you compete, the more you grow.
-          </p>
-        </div>
-        <a
-          href="/register"
-          className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-gradient-to-r from-[#1e3fff] to-[#3b6bff] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-[#1e3fff]/30 transition-all hover:scale-[1.04] hover:from-[#3d6bff] hover:to-[#5ec8ff] hover:shadow-[#5ec8ff]/50"
-        >
-          Register Now
-          <ArrowRight className="h-4 w-4" />
-        </a>
-      </motion.div>
     </section>
   )
 }

@@ -1,7 +1,5 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'motion/react'
 import {
   Rocket,
   Cpu,
@@ -9,7 +7,6 @@ import {
   Leaf,
   Bot,
   Dna,
-  Sparkles,
 } from 'lucide-react'
 
 const ITEMS = [
@@ -21,10 +18,10 @@ const ITEMS = [
   { icon: Dna, label: 'Biotech', ring: 2, angle: 250 },
 ]
 
-const RING_SIZES = [180, 290, 400] // px diameters
+const RING_SIZES = [160, 260, 360] // px diameters (scaled to fit all phones)
 const RING_DURATIONS = [26, 38, 52] // seconds
 
-// Theme tokens — deep-to-electric blue, no purple
+// Theme tokens — deep-to-electric blue
 const BLUE_CORE = '#1e3fff'
 const BLUE_BRIGHT = '#3d6bff'
 const CYAN_HOT = '#5ec8ff'
@@ -32,57 +29,42 @@ const CYAN_BRIGHT = '#4fd8ff'
 const WHITE_HOT = '#baf5ff'
 
 export function InnovationCore() {
-  const ref = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start start', 'end start'],
-  })
-
-  // orbit expands and fades as the user scrolls past the hero
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 3])
-  const opacity = useTransform(scrollYProgress, [0, 1], [1, 0])
-  const coreScale = useTransform(scrollYProgress, [0, 1], [1, 3])
-
   return (
     <div
-      ref={ref}
-      className="relative mx-auto flex aspect-square w-full max-w-[460px] items-center justify-center"
+      className="relative mx-auto flex aspect-square w-full max-w-[340px] sm:max-w-[420px] items-center justify-center will-change-transform scale-[0.85] xs:scale-95 sm:scale-100 origin-center"
       aria-hidden="true"
     >
       {/* Ambient glow wash behind everything */}
       <div
         className="pointer-events-none absolute inset-0 rounded-full blur-3xl"
         style={{
-          background: `radial-gradient(circle, ${BLUE_BRIGHT}55 0%, ${CYAN_HOT}22 45%, transparent 70%)`,
+          background: `radial-gradient(circle, ${BLUE_BRIGHT}44 0%, ${CYAN_HOT}18 45%, transparent 70%)`,
         }}
       />
 
-      <motion.div
-        style={{ scale, opacity }}
-        className="absolute inset-0 flex items-center justify-center"
-      >
-        {/* Glowing central core */}
-        <motion.div
-          style={{ scale: coreScale }}
-          className="absolute z-10 flex items-center justify-center"
-        >
+      <div className="absolute inset-0 flex items-center justify-center">
+        {/* Glowing central core with high-tech emblem */}
+        <div className="absolute z-10 flex items-center justify-center">
           <div
-            className="absolute h-16 w-16 rounded-full blur-xl"
+            className="absolute h-14 w-14 sm:h-16 sm:w-16 rounded-full blur-xl"
             style={{
               background: `radial-gradient(circle, ${WHITE_HOT} 0%, ${CYAN_BRIGHT} 40%, ${BLUE_CORE} 100%)`,
               animation: 'pulse-glow 3s ease-in-out infinite',
             }}
           />
           <div
-            className="relative flex h-11 w-11 items-center justify-center rounded-full"
+            className="relative flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-full border border-white/30 bg-[#050816] shadow-lg"
             style={{
-              background: `radial-gradient(circle, ${WHITE_HOT} 0%, ${CYAN_BRIGHT} 55%, ${BLUE_CORE} 100%)`,
-              boxShadow: `0 0 24px 6px ${CYAN_BRIGHT}aa, 0 0 60px 14px ${BLUE_CORE}66`,
+              boxShadow: `0 0 20px 4px ${CYAN_BRIGHT}aa, 0 0 40px 10px ${BLUE_CORE}66`,
             }}
           >
-            <Sparkles className="h-5 w-5 text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.9)]" />
+            <img
+              src="/logo_ecell.png"
+              alt="E-Cell Emblem"
+              className="h-7 w-7 sm:h-8 sm:w-8 object-contain drop-shadow-[0_0_8px_rgba(94,200,255,0.9)]"
+            />
           </div>
-        </motion.div>
+        </div>
 
         {/* Orbit rings + icons */}
         {RING_SIZES.map((size, ringIdx) => {
@@ -90,12 +72,12 @@ export function InnovationCore() {
           return (
             <div
               key={size}
-              className="absolute rounded-full"
+              className="absolute rounded-full pointer-events-none"
               style={{
                 width: size,
                 height: size,
-                border: `1px solid ${CYAN_BRIGHT}55`,
-                boxShadow: `0 0 20px 2px ${BLUE_BRIGHT}33, inset 0 0 20px 2px ${BLUE_CORE}22`,
+                border: `1px solid ${CYAN_BRIGHT}44`,
+                boxShadow: `0 0 14px 1px ${BLUE_BRIGHT}22, inset 0 0 14px 1px ${BLUE_CORE}18`,
                 animation: `${
                   reverse ? 'spin-reverse' : 'spin-slow'
                 } ${RING_DURATIONS[ringIdx]}s linear infinite`,
@@ -110,27 +92,27 @@ export function InnovationCore() {
                 return (
                   <div
                     key={it.label}
-                    className="absolute left-1/2 top-1/2"
+                    className="absolute left-1/2 top-1/2 pointer-events-auto"
                     style={{
                       transform: `translate(${x}px, ${y}px) translate(-50%, -50%)`,
                     }}
                   >
                     <div
-                      className="flex h-12 w-12 items-center justify-center rounded-2xl backdrop-blur-md transition-transform duration-300 hover:scale-110"
+                      className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-2xl backdrop-blur-md transition-transform duration-200 hover:scale-110"
                       style={{
                         animation: `${
                           reverse ? 'spin-slow' : 'spin-reverse'
                         } ${RING_DURATIONS[ringIdx]}s linear infinite`,
-                        background: `linear-gradient(135deg, ${BLUE_CORE}66, ${BLUE_BRIGHT}33)`,
+                        background: `linear-gradient(135deg, ${BLUE_CORE}77, ${BLUE_BRIGHT}44)`,
                         border: `1px solid ${CYAN_BRIGHT}66`,
-                        boxShadow: `0 0 16px 2px ${CYAN_BRIGHT}55, 0 0 32px 6px ${BLUE_CORE}44`,
+                        boxShadow: `0 0 12px 2px ${CYAN_BRIGHT}44, 0 0 20px 3px ${BLUE_CORE}33`,
                       }}
                     >
                       <Icon
-                        className="h-5 w-5"
+                        className="h-4 w-4 sm:h-5 sm:w-5"
                         style={{
                           color: WHITE_HOT,
-                          filter: `drop-shadow(0 0 6px ${CYAN_BRIGHT})`,
+                          filter: `drop-shadow(0 0 4px ${CYAN_BRIGHT})`,
                         }}
                       />
                     </div>
@@ -140,7 +122,7 @@ export function InnovationCore() {
             </div>
           )
         })}
-      </motion.div>
+      </div>
 
       <style jsx>{`
         @keyframes pulse-glow {
@@ -151,7 +133,7 @@ export function InnovationCore() {
           }
           50% {
             opacity: 1;
-            transform: scale(1.25);
+            transform: scale(1.15);
           }
         }
       `}</style>

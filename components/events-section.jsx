@@ -7,8 +7,7 @@ import { Mic, BookOpen } from 'lucide-react'
 const EVENTS = [
   {
     id: 'discussions',
-    sectionIcon: '/images/panel-discussion.png',
-    FallbackIcon: Mic,
+    Icon: Mic,
     tone: 'cyan',
     type: 'AMA Session',
     title: 'Startup 101',
@@ -22,8 +21,7 @@ const EVENTS = [
   },
   {
     id: 'workshops',
-    sectionIcon: '/images/workshops.png',
-    FallbackIcon: BookOpen,
+    Icon: BookOpen,
     tone: 'orange',
     type: 'Special Session',
     title: 'Campus Hangout',
@@ -40,7 +38,7 @@ const EVENTS = [
 const TONE = {
   cyan: {
     accent: 'text-[#4fd8ff]',
-    accentBg: 'bg-[#3b6bff]/12',
+    accentBg: 'bg-[#3b6bff]/15',
     accentRing: 'ring-[#3b6bff]/35',
     accentBorder: 'border-[#3b6bff]/30',
     glow: 'from-[#3b6bff]/18 via-[#3b6bff]/6',
@@ -51,11 +49,10 @@ const TONE = {
     badge: 'bg-[#3b6bff]/12 text-[#4fd8ff] border-[#3b6bff]/30',
     imageGlow: 'shadow-[#3b6bff]/35',
     imageRing: 'ring-[#3b6bff]/45',
-    fallbackIcon: 'text-[#4fd8ff] bg-[#3b6bff]/12',
   },
   orange: {
     accent: 'text-[#5ec8ff]',
-    accentBg: 'bg-[#1e3fff]/15',
+    accentBg: 'bg-[#1e3fff]/18',
     accentRing: 'ring-[#1e3fff]/35',
     accentBorder: 'border-[#1e3fff]/30',
     glow: 'from-[#1e3fff]/18 via-[#3d6bff]/6',
@@ -66,25 +63,24 @@ const TONE = {
     badge: 'bg-[#1e3fff]/12 text-[#5ec8ff] border-[#1e3fff]/30',
     imageGlow: 'shadow-[#1e3fff]/35',
     imageRing: 'ring-[#1e3fff]/45',
-    fallbackIcon: 'text-[#5ec8ff] bg-[#1e3fff]/15',
   },
 }
 
 const fade = {
-  hidden: { opacity: 0, y: 32 },
+  hidden: { opacity: 0, y: 15 },
   show: (i) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay: i * 0.14 },
+    transition: { duration: 0.35, delay: i * 0.05, ease: 'easeOut' },
   }),
 }
 
 const scaleIn = {
-  hidden: { opacity: 0, scale: 0.92 },
+  hidden: { opacity: 0, scale: 0.96 },
   show: {
     opacity: 1,
     scale: 1,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.35, ease: 'easeOut' },
   },
 }
 
@@ -96,29 +92,29 @@ function SpeakerCard({ speaker, tone, type }) {
       variants={scaleIn}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: '-40px' }}
+      viewport={{ once: true, margin: '150px 0px' }}
       className="group relative mx-auto w-full max-w-sm"
     >
       <div
-        className={`absolute -inset-px rounded-3xl bg-gradient-to-b ${t.line} opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+        className={`absolute -inset-px rounded-3xl bg-gradient-to-b ${t.line} opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
       />
 
       <div
-        className={`glass relative flex flex-col overflow-hidden rounded-3xl transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:${t.glowStrong}`}
+        className={`glass relative flex flex-col overflow-hidden rounded-3xl transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:${t.glowStrong}`}
       >
         <div className={`absolute left-0 right-0 top-0 h-px bg-gradient-to-r ${t.line}`} />
 
         <div
-          className={`pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b ${t.glow} to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100`}
+          className={`pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b ${t.glow} to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100`}
         />
 
         <div className="relative overflow-hidden">
-          <div className="relative h-80 w-full">
+          <div className="relative h-72 sm:h-80 w-full">
             <Image
               src={speaker.image}
               alt={speaker.name}
               fill
-              className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+              className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 640px) 100vw, 384px"
               priority
             />
@@ -135,15 +131,15 @@ function SpeakerCard({ speaker, tone, type }) {
           </div>
         </div>
 
-        <div className="flex flex-col items-center px-8 pb-8 pt-5 text-center">
-          <h4 className="font-heading text-2xl font-bold leading-tight tracking-tight">
+        <div className="flex flex-col items-center px-6 pb-7 pt-5 text-center">
+          <h4 className="font-heading text-xl sm:text-2xl font-bold leading-tight tracking-tight text-white">
             {speaker.name}
           </h4>
-          <p className={`mt-2 text-sm leading-relaxed ${t.accent} font-medium`}>
+          <p className={`mt-1.5 text-xs sm:text-sm leading-relaxed ${t.accent} font-medium`}>
             {speaker.role}
           </p>
 
-          <div className={`mt-5 h-px w-16 bg-gradient-to-r ${t.lineCenter}`} />
+          <div className={`mt-4 h-px w-16 bg-gradient-to-r ${t.lineCenter}`} />
         </div>
       </div>
     </motion.div>
@@ -152,7 +148,7 @@ function SpeakerCard({ speaker, tone, type }) {
 
 function EventBlock({ event, blockIndex }) {
   const t = TONE[event.tone]
-  const FallbackIcon = event.FallbackIcon
+  const Icon = event.Icon
 
   return (
     <motion.div
@@ -160,34 +156,24 @@ function EventBlock({ event, blockIndex }) {
       custom={blockIndex}
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: '-60px' }}
+      viewport={{ once: true, margin: '150px 0px' }}
       id={event.id}
       className="scroll-mt-24"
     >
-      <div className="mb-12 flex flex-col items-center text-center">
-        <div className="mb-4 flex items-center gap-3">
+      <div className="mb-10 flex flex-col items-center text-center">
+        <div className="mb-3 flex items-center gap-3">
           <div
-            className={`relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl ring-1 ${t.accentRing} ${t.accentBg}`}
+            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl ring-1 ${t.accentRing} ${t.accentBg}`}
           >
-            <Image
-              src={event.sectionIcon}
-              alt={event.title}
-              fill
-              className="object-contain p-2"
-              sizes="48px"
-              onError={(e) => {
-                e.currentTarget.style.display = 'none'
-              }}
-            />
-            <FallbackIcon className={`absolute h-5 w-5 ${t.accent}`} />
+            <Icon className={`h-5 w-5 ${t.accent}`} />
           </div>
 
-          <h3 className="font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+          <h3 className="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-white">
             {event.title}
           </h3>
         </div>
 
-        <p className="text-sm text-[#9fb3e8]">
+        <p className="text-xs sm:text-sm text-[#9fb3e8]">
           {event.type}
         </p>
       </div>
@@ -197,12 +183,11 @@ function EventBlock({ event, blockIndex }) {
           ? 'place-items-center'
           : 'place-items-center sm:grid-cols-2'
       }`}>
-        {event.speakers.map((speaker, i) => (
+        {event.speakers.map((speaker) => (
           <SpeakerCard
             key={speaker.name}
             speaker={speaker}
             tone={event.tone}
-            index={i}
             type={event.type}
           />
         ))}
@@ -213,17 +198,17 @@ function EventBlock({ event, blockIndex }) {
 
 export function EventsSection() {
   return (
-    <section className="relative mx-auto max-w-6xl px-4 py-28">
+    <section className="relative mx-auto max-w-6xl px-4 py-16 sm:py-20">
       <motion.div
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, margin: '-80px' }}
-        className="mx-auto mb-20 max-w-2xl text-center"
+        viewport={{ once: true, margin: '150px 0px' }}
+        className="mx-auto mb-12 max-w-2xl text-center"
       >
         <motion.div
           variants={fade}
           custom={0}
-          className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-muted-foreground"
+          className="glass mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1 text-xs text-muted-foreground"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-[#3d6bff]" />
           Sessions &amp; Workshops
@@ -232,7 +217,7 @@ export function EventsSection() {
         <motion.h2
           variants={fade}
           custom={1}
-          className="text-balance font-heading text-4xl font-bold tracking-tight text-white sm:text-5xl"
+          className="text-balance font-heading text-3xl sm:text-4xl font-bold tracking-tight text-white"
         >
           Learn from the{' '}
           <span className="bg-gradient-to-r from-[#3d6bff] via-[#5ec8ff] to-[#4fd8ff] bg-clip-text text-transparent">
@@ -243,19 +228,19 @@ export function EventsSection() {
         <motion.p
           variants={fade}
           custom={2}
-          className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-[#d8e4ff]"
+          className="mx-auto mt-3 max-w-xl text-pretty text-xs sm:text-sm leading-relaxed text-[#d8e4ff]"
         >
           Candid conversations, hands-on sessions, and real-world insights from
           founders, domain heads, and industry builders.
         </motion.p>
       </motion.div>
 
-      <div className="flex flex-col gap-24">
+      <div className="flex flex-col gap-16">
         {EVENTS.map((event, i) => (
           <div key={event.id}>
             <EventBlock event={event} blockIndex={i} />
             {i < EVENTS.length - 1 && (
-              <div className="mx-auto mt-24 h-px max-w-lg bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <div className="mx-auto mt-16 h-px max-w-lg bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             )}
           </div>
         ))}
