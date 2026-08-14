@@ -19,7 +19,11 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://entreverse.ecelliitk.org'
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
+  ? process.env.NEXT_PUBLIC_SITE_URL
+  : process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : 'https://entreverse.ecelliitk.org'
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
