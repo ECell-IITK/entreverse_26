@@ -2,94 +2,57 @@ version: "3.9"
 
 # ── EntreVerse 2026 ───────────────────────────────────────────────────────────
 #
+# Fullstack Next.js (Node.js + JavaScript) + MongoDB
+#
 # Usage:
-#   cp backend/.env.example backend/.env   # fill in your values
 #   docker compose up --build
 #
-# The postgres container initialises the schema on first launch using init.sql.
-# To wipe everything and start fresh:  docker compose down -v
+# To wipe data and start fresh:  docker compose down -v
 
 services:
 
-  # ── PostgreSQL ──────────────────────────────────────────────
-  postgres:
-    image: postgres:16-alpine
+  # ── MongoDB ────────────────────────────────────────────────
+  mongodb:
+    image: mongo:7.0
     container_name: entreverse_db
     restart: unless-stopped
-    environment:
-      POSTGRES_DB:       entreverse
-      POSTGRES_USER:     entreverse
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pg_data:/var/lib/postgresql/data
-      # Schema is applied automatically on first run
-      - ./backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     ports:
-      - "5432:5432"
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U entreverse"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      app_net:
-        aliases:
-          - postgres
-
-  # ── Go API ─────────────────────────────────────────────────
-  api:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: entreverse_api
-    restart: unless-stopped
-    depends_on:
-      - postgres
-    # Load environment variables (ADMIN_CREDENTIALS, JWT_SECRET, etc.) from backend/.env
-    env_file:
-      - ./backend/.env
-    environment:
-      GIN_MODE:        release
-      PORT:            8080
-      # Connect to the postgres service at the internal container port 5432
-      DATABASE_URL:    postgres://entreverse:postgres@postgres:5432/entreverse?sslmode=disable
-      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:3000}
-    ports:
-      - "8080:8080"
-    # healthcheck:
-    #   test: ["CMD-SHELL", "curl -f http://localhost:8080/health || exit 1"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 5
-    healthcheck:
-      test:
-        ["CMD-SHELL","wget -qO- http://localhost:8080/health >/dev/null || exit 1"]
-    networks:
       - app_net
 
-  # ── Next.js Frontend ───────────────────────────────────────
-  frontend:
+  # ── Next.js Fullstack (Frontend + API Routes) ───────────────
+  app:
     build:
-      context: ./frontend
+      context: .
       dockerfile: Dockerfile
-      args:
-        # Points the browser at the public-facing backend URL.
-        # Override with: NEXT_PUBLIC_API_URL=https://api.example.com docker compose up
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
-    container_name: entreverse_frontend
+    container_name: entreverse_app
     restart: unless-stopped
     depends_on:
-      api:
+      mongodb:
         condition: service_healthy
     environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8080}
+      NODE_ENV: production
+      PORT: 3000
+      MONGODB_URI: mongodb://mongodb:27017/entreverse
+      JWT_SECRET: ${JWT_SECRET:-entreverse-2026-super-secret-jwt-key-change-in-prod}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-Admin@IITK2026}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
     ports:
       - "3000:3000"
     networks:
       - app_net
 
 volumes:
-  pg_data:
+  mongo_data:
 
 networks:
   app_net:
