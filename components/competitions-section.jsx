@@ -10,7 +10,7 @@ const COMPETITIONS = [
     icon: TrendingUp,
     tone: 'violet',
     tag: 'UGs & Y26s · VC Bidding',
-    teamSize: '2–4 members',
+    teamSize: '1–4 members',
     title: 'Venture And Verdict',
     description:
       'Step into early-stage venture capital. Analyze startup balance sheets, bid in live auction rounds, and pitch to senior VC partners.',
@@ -22,7 +22,7 @@ const COMPETITIONS = [
     icon: Briefcase,
     tone: 'indigo',
     tag: 'PGs & MBAs · Consulting',
-    teamSize: '2–4 members',
+    teamSize: '1–4 members',
     title: 'Startup Builder',
     description:
       'Tackle live business crises. Unravel supply chain and market bottlenecks, then present turnaround roadmaps to corporate leaders.',
@@ -34,7 +34,7 @@ const COMPETITIONS = [
     icon: Zap,
     tone: 'cyan',
     tag: 'Open to All',
-    teamSize: '1–5 members',
+    teamSize: '1–4 members',
     title: 'Start-up-Sprint',
     description:
       '24 hours on the clock. Whiteboard sketch to working MVP before dawn. Demo live to angels for instant SIIC incubation backing.',

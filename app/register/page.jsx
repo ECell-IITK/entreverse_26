@@ -23,7 +23,7 @@ const DEFAULT_COMPETITIONS = [
     description:
       'Step into early-stage venture capital. Analyze startup balance sheets, bid in live auction rounds, and pitch to senior VC partners.',
     max_team_size: 4,
-    min_team_size: 2,
+    min_team_size: 1,
     registration_open: true,
   },
   {
@@ -34,7 +34,7 @@ const DEFAULT_COMPETITIONS = [
     description:
       'Tackle live business crises. Unravel supply chain and market bottlenecks, then present turnaround roadmaps to corporate leaders.',
     max_team_size: 4,
-    min_team_size: 2,
+    min_team_size: 1,
     registration_open: true,
   },
   {
@@ -44,7 +44,7 @@ const DEFAULT_COMPETITIONS = [
     slug: 'start-up-sprint',
     description:
       '24 hours on the clock. Whiteboard sketch to working MVP before dawn. Demo live to angels for instant SIIC incubation backing.',
-    max_team_size: 5,
+    max_team_size: 4,
     min_team_size: 1,
     registration_open: true,
   },
