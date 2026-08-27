@@ -189,45 +189,42 @@ export async function POST(request) {
       });
     }
 
-    // 9. Safe database uniqueness checks against injection & ReDoS
+    // 9. Safe & high-speed database uniqueness checks against injection & ReDoS
     const escapedTeamName = escapeRegex(cleanTeamName);
-    const existingTeam = await Team.findOne({
-      competition_id: numCompId,
-      team_name: { $regex: new RegExp(`^${escapedTeamName}$`, 'i') },
-    }).lean();
-
-    if (existingTeam) {
-      return NextResponse.json(
-        { success: false, error: 'Team name is already registered for this competition', code: 409 },
-        { status: 409 }
-      );
-    }
-
     const rollNos = cleanMembers.map((m) => m.roll_no);
     const emails = cleanMembers.map((m) => m.email);
 
-    const dupRoll = await Team.findOne({
+    const conflict = await Team.findOne({
       competition_id: numCompId,
-      'members.roll_no': { $in: rollNos },
-    }).lean();
+      $or: [
+        { team_name: { $regex: new RegExp(`^${escapedTeamName}$`, 'i') } },
+        { 'members.roll_no': { $in: rollNos } },
+        { 'members.email': { $in: emails } },
+      ],
+    })
+      .select('team_name members.roll_no members.email')
+      .lean();
 
-    if (dupRoll) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'One or more roll numbers in your team are already registered for this competition',
-          code: 409,
-        },
-        { status: 409 }
-      );
-    }
+    if (conflict) {
+      if (conflict.team_name && conflict.team_name.toLowerCase() === cleanTeamName.toLowerCase()) {
+        return NextResponse.json(
+          { success: false, error: 'Team name is already registered for this competition', code: 409 },
+          { status: 409 }
+        );
+      }
 
-    const dupEmail = await Team.findOne({
-      competition_id: numCompId,
-      'members.email': { $in: emails },
-    }).lean();
+      const dupRollFound = conflict.members?.some((m) => rollNos.includes(m.roll_no));
+      if (dupRollFound) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'One or more roll numbers in your team are already registered for this competition',
+            code: 409,
+          },
+          { status: 409 }
+        );
+      }
 
-    if (dupEmail) {
       return NextResponse.json(
         {
           success: false,
