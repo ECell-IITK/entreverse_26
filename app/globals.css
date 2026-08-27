@@ -1,0 +1,326 @@
+@import url('https://fonts.cdnfonts.com/css/ethnocentric');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@800;900&family=Russo+One&family=Syncopate:wght@700&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Fonts */
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-space-grotesk);
+  --font-mono: var(--font-geist-mono);
+
+  /* Main Colors — mapped to Tailwind utility classes */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-destructive: var(--destructive);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* EntreVerse Cyber-Neon: Electric Violet & Laser Cyan */
+  --color-background-secondary: var(--background-secondary);
+
+  /* Left stream (Electro-Violet / Indigo) */
+  --color-violet-core:     var(--violet-core);
+  --color-violet-bright:   var(--violet-bright);
+  --color-violet-electric: var(--violet-electric);
+
+  /* Right stream (Laser Cyan / Electric Blue Wave) */
+  --color-blue-core:   var(--blue-core);
+  --color-blue-bright: var(--blue-bright);
+  --color-cyan-hot:    var(--cyan-hot);
+
+  /* Flare */
+  --color-line-white-hot: var(--line-white-hot);
+
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-muted:     var(--text-muted);
+
+  --color-border-glow: var(--border-glow);
+
+  /* Radius */
+  --radius-sm:  calc(var(--radius) * .6);
+  --radius-md:  calc(var(--radius) * .8);
+  --radius-lg:  var(--radius);
+  --radius-xl:  calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+}
+
+:root {
+  color-scheme: dark;
+
+  --radius: 1rem;
+
+  /* ─── Obsidian Midnight Void ──────────────────────────────── */
+  --background:           #030014;   /* Deep obsidian void */
+  --background-secondary: #05021a;
+
+  --foreground: #ffffff;
+
+  /* ─── Glass & Card Surfaces ───────────────────────────────── */
+  --card:            rgba(10, 6, 30, 0.70);
+  --card-foreground: #ffffff;
+
+  --popover:            rgba(10, 6, 30, 0.90);
+  --popover-foreground: #ffffff;
+
+  /* ─── Primary = Electro-Violet / Indigo ─────────────────── */
+  --primary:            #7c3aed;     /* Electric Pure Violet */
+  --primary-foreground: #ffffff;
+
+  /* ─── Secondary = Laser Blue ────────────────────────── */
+  --secondary:            #2563eb;
+  --secondary-foreground: #ffffff;
+
+  /* ─── Accent = Electric Laser Cyan ───────────────────────── */
+  --accent:            #00f0ff;     /* Laser Cyan Wave */
+  --accent-foreground: #030014;
+
+  --muted:            #0d082e;
+  --muted-foreground: #94a3b8;       /* Clean silver-slate */
+
+  --destructive: #ef4444;
+
+  --border:      rgba(124, 58, 237, 0.25);
+  --border-glow: rgba(0, 240, 255, 0.40);
+
+  --input: rgba(13, 8, 46, 0.6);
+  --ring:  #7c3aed;
+
+  /* ─── Pure Electro-Violet & Laser Cyan Palette (Zero Pink) ── */
+  --bg-void:      #030014;
+  --bg-void-deep: #02000d;
+  --nebula-haze:  #0a0524;
+
+  /* Left stream — Pure Electric Violet */
+  --violet-core:     #5b21b6;          /* Deep rich royal violet */
+  --violet-bright:   #7c3aed;          /* Vivid electro violet */
+  --violet-electric: #a78bfa;          /* Electric violet highlight */
+
+  /* Right stream — Laser Cyan & Electric Blue */
+  --blue-core:   #1d4ed8;          /* Laser royal blue */
+  --blue-bright: #00f0ff;          /* Crisp laser cyan */
+  --cyan-hot:    #e0f2fe;          /* Hot white-cyan */
+
+  --line-white-hot: #ffffff;
+
+  --grid-line:     rgba(124, 58, 237, 0.20);
+  --particle-dust: rgba(0, 240, 255, 0.50);
+
+  --text-primary:   #ffffff;         /* pure white headings */
+  --text-secondary: #e2e8f0;         /* crisp silver-white readable text */
+  --text-muted:     #94a3b8;         /* clean slate muted text */
+
+  /* Aliases */
+  --accent-orange: #7c3aed;
+  --accent-blue:   #3b82f6;
+  --accent-cyan:   #00f0ff;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BASE LAYER
+   ═══════════════════════════════════════════════════════════ */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+    font-family: var(--font-inter);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    min-height: 100vh;
+    font-family: var(--font-inter);
+    background-color: #030014;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-space-grotesk);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY: GLASS PANEL (Obsidian Violet/Cyan Glow)
+   ═══════════════════════════════════════════════════════════ */
+.glass {
+  background: rgba(10, 6, 32, 0.68);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(124, 58, 237, 0.24);
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.glass-hover:hover,
+.glass:hover {
+  border-color: rgba(0, 240, 255, 0.50);
+  box-shadow:
+    0 14px 45px rgba(0, 0, 0, 0.75),
+    0 0 30px -5px rgba(124, 58, 237, 0.35),
+    inset 0 1px 0 rgba(0, 240, 255, 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY: GRADIENT TEXT (Electro-Violet → Indigo → Laser Cyan)
+   ═══════════════════════════════════════════════════════════ */
+.gradient-text {
+  background: linear-gradient(
+    90deg,
+    #a78bfa 0%,
+    #818cf8 40%,
+    #00f0ff 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.gradient-text-cool {
+  background: linear-gradient(
+    90deg,
+    #c4b5fd 0%,
+    #60a5fa 50%,
+    #00f0ff 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   UTILITY: CTA GRADIENT BUTTON (Electro-Violet → Indigo → Cyan)
+   ═══════════════════════════════════════════════════════════ */
+.btn-continuum {
+  background: linear-gradient(
+    135deg,
+    #6d28d9 0%,
+    #4f46e5 50%,
+    #00f0ff 100%
+  );
+  color: #fff;
+  box-shadow:
+    0 0 28px -3px rgba(109, 40, 217, 0.75),
+    0 0 50px -10px rgba(0, 240, 255, 0.50);
+  transition: all 0.25s ease;
+}
+
+.btn-continuum:hover {
+  background: linear-gradient(
+    135deg,
+    #7c3aed 0%,
+    #6366f1 50%,
+    #00f0ff 100%
+  );
+  box-shadow:
+    0 0 38px -2px rgba(124, 58, 237, 0.95),
+    0 0 70px -10px rgba(0, 240, 255, 0.80);
+  transform: scale(1.03);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   ANIMATIONS
+   ═══════════════════════════════════════════════════════════ */
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0  0px rgba(124, 58, 237, 0.75); }
+  70%  { box-shadow: 0 0 0 16px rgba(124, 58, 237, 0);    }
+  100% { box-shadow: 0 0 0  0px rgba(124, 58, 237, 0);    }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2.4s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+}
+
+@keyframes float-soft {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-10px); }
+}
+
+.animate-float-soft {
+  animation: float-soft 5s ease-in-out infinite;
+}
+
+@keyframes spin-slow    { to { transform: rotate(360deg);  } }
+@keyframes spin-reverse { to { transform: rotate(-360deg); } }
+
+.spin-slow    { animation: spin-slow    26s linear infinite; }
+.spin-reverse { animation: spin-reverse 26s linear infinite; }
+
+/* ═══════════════════════════════════════════════════════════
+   3D SCI-FI LOGO WORDMARK (ENTREVERSE)
+   ═══════════════════════════════════════════════════════════ */
+.font-logo {
+  font-family: 'Ethnocentric', 'Ethnocentric Rg', 'Orbitron', 'Russo One', var(--font-space-grotesk), sans-serif;
+}
+
+.entreverse-3d {
+  font-family: 'Ethnocentric', 'Ethnocentric Rg', 'Orbitron', 'Russo One', var(--font-space-grotesk), sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #ffffff;
+  letter-spacing: 0.04em;
+  display: inline-block;
+  text-shadow:
+    0 1px 0 #f0f0f0,
+    0 2px 0 #e0e0e0,
+    0 3px 0 #d0d0d0,
+    0 4px 0 #bfbfbf,
+    0 5px 0 #adadad,
+    0 6px 0 #9a9a9a,
+    0 7px 0 #858585,
+    0 8px 0 #707070,
+    0 9px 0 #595959,
+    0 11px 16px rgba(0, 0, 0, 0.9),
+    0 18px 30px rgba(0, 0, 0, 0.95),
+    0 0 45px rgba(0, 240, 255, 0.4);
+}
+
+.year-3d {
+  font-family: 'Ethnocentric', 'Ethnocentric Rg', 'Orbitron', 'Russo One', var(--font-space-grotesk), sans-serif;
+  font-weight: 900;
+  color: #00f0ff;
+  display: inline-block;
+  letter-spacing: 0.04em;
+  text-shadow:
+    0 1px 0 #67e8f9,
+    0 2px 0 #38bdf8,
+    0 3px 0 #0ea5e9,
+    0 4px 0 #0284c7,
+    0 5px 0 #0369a1,
+    0 6px 0 #075985,
+    0 7px 0 #0c4a6e,
+    0 8px 0 #1e3a8a,
+    0 11px 16px rgba(0, 0, 0, 0.9),
+    0 18px 30px rgba(0, 0, 0, 0.95),
+    0 0 45px rgba(0, 240, 255, 0.6);
+}
