@@ -1,7 +1,6 @@
 import { motion } from 'motion/react'
 import { CheckCircle2, ArrowRight, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
-import { formatTeamCode } from '@/lib/utils'
 
 const WHATSAPP_LINKS = {
   'startup-builder': 'https://chat.whatsapp.com/BvGkjFdoNifGfFH6GOcWNg?s=cl&p=a&mlu=4',
@@ -43,14 +42,6 @@ export default function StepSuccess({ teamId, teamName, competition }) {
         <p className="mt-2 text-slate-300">
           Team <span className="font-semibold text-white">{teamName}</span> is officially registered for{' '}
           <span className="font-bold text-[#00f0ff]">{competition.name}</span>.
-        </p>
-      </div>
-
-      <div className="w-full max-w-sm rounded-2xl border border-violet-500/30 bg-violet-950/30 px-6 py-5 shadow-lg">
-        <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-slate-400">Official Registration Code</p>
-        <p className="font-mono text-3xl sm:text-4xl font-extrabold tracking-wider bg-gradient-to-r from-violet-400 via-indigo-300 to-[#00f0ff] bg-clip-text text-transparent">{formatTeamCode(teamId)}</p>
-        <p className="mt-2 text-xs text-slate-400">
-          Save your Registration Code for festival check-in and pitch schedules.
         </p>
       </div>
 
