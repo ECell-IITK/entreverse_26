@@ -368,3 +368,17 @@
     0 18px 30px rgba(0, 0, 0, 0.95),
     0 0 45px rgba(0, 240, 255, 0.6);
 }
+
+sup {
+  vertical-align: super;
+  font-size: 0.55em;
+  line-height: 0;
+}
+
+sub {
+  vertical-align: sub;
+  font-size: 0.55em;
+  line-height: 0;
+}
+
+

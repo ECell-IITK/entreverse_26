@@ -43,7 +43,9 @@ export function Hero() {
           className="mt-6 sm:mt-9"
         >
           <p className="font-sans text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-wider text-[#00f0ff] drop-shadow-[0_0_20px_rgba(0,240,255,0.6)]">
-            1<sup className="text-xs sm:text-sm font-normal">ST</sup>-4<sup className="text-xs sm:text-sm font-normal">TH</sup> OCTOBER, 2026
+            1<sup className="align-super text-[0.55em] font-semibold relative -top-[0.1em] ml-0.5">ST</sup>
+            <span className="mx-0.5">–</span>
+            4<sup className="align-super text-[0.55em] font-semibold relative -top-[0.1em] ml-0.5">TH</sup> OCTOBER, 2026
           </p>
         </motion.div>
 

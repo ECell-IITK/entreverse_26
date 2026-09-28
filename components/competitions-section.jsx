@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'motion/react'
-import { ArrowRight, TrendingUp, Briefcase, Zap, Users, Lightbulb } from 'lucide-react'
+import { ArrowRight, TrendingUp, Briefcase, Zap, Users, Lightbulb, Clock } from 'lucide-react'
 
 const COMPETITIONS = [
   {
@@ -21,7 +21,7 @@ const COMPETITIONS = [
     number: '02',
     icon: Briefcase,
     tone: 'indigo',
-    tag: 'PGs & MBAs · Consulting',
+    tag: 'PGs & PhDs',
     teamSize: '1–4 members',
     title: 'Startup Builder',
     description:
@@ -46,12 +46,13 @@ const COMPETITIONS = [
     icon: Lightbulb,
     tone: 'blue',
     tag: 'Open to All · Ideation',
-    teamSize: '1–4 members',
+    teamSize: null,
+    sessionTime: '4 Oct · 11:00 AM – 1:30 PM',
     title: 'Idea Matters Most',
     description:
-      'Got a game-changing concept? Transform raw ideas into structured business blueprints, validate problem statements, and pitch to distinguished mentors.',
+      'Challenge conventional thinking, question assumptions, and explore how unconventional ideas can spark meaningful innovation. Discover new perspectives, explore opportunities, and learn to think beyond the obvious with insights from the Ideas Matter Most team.',
     registerHref: null,
-    ctaText: 'Opening Soon',
+    ctaText: null,
   },
 ]
 
@@ -167,37 +168,48 @@ export function CompetitionsSection() {
                   </div>
 
                   {/* Metadata Chips & Description */}
-                  <div className="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm">
-                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-white/5 px-2.5 py-0.5 sm:py-1 text-slate-300 font-medium border border-white/10 text-xs">
-                      <Users className="h-3.5 w-3.5 text-[#00f0ff]" />
-                      {comp.teamSize}
-                    </span>
-                  </div>
+                  {comp.teamSize && (
+                    <div className="mt-3 sm:mt-4 flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm">
+                      <span className="inline-flex items-center gap-1.5 rounded-lg bg-white/5 px-2.5 py-0.5 sm:py-1 text-slate-300 font-medium border border-white/10 text-xs">
+                        <Users className="h-3.5 w-3.5 text-[#00f0ff]" />
+                        {comp.teamSize}
+                      </span>
+                    </div>
+                  )}
 
                   <p className="mt-2.5 sm:mt-3 max-w-2xl text-xs sm:text-sm leading-relaxed text-slate-300 font-normal">
                     {comp.description}
                   </p>
                 </div>
 
-                {/* CTA Button */}
-                <div className="shrink-0 pt-1 sm:pt-0">
-                  {comp.registerHref ? (
-                    <a
-                      href={comp.registerHref}
-                      className="group/btn w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl sm:rounded-2xl btn-continuum px-6 py-3 sm:px-7 sm:py-3.5 text-xs sm:text-sm font-bold text-white transition-all duration-200 hover:scale-105"
-                    >
-                      Register Team
-                      <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
-                    </a>
-                  ) : (
-                    <div
-                      className="w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl sm:rounded-2xl border border-violet-500/30 bg-violet-950/40 px-6 py-3 sm:px-7 sm:py-3.5 text-xs sm:text-sm font-semibold text-slate-300 backdrop-blur-md cursor-default select-none shadow-[0_0_15px_-3px_rgba(124,58,237,0.3)]"
-                    >
-                      <span className="h-2 w-2 rounded-full bg-[#00f0ff] animate-pulse" />
-                      <span>{comp.ctaText || 'Opening Soon'}</span>
-                    </div>
-                  )}
-                </div>
+                {/* CTA Button / Session Schedule */}
+                {(comp.registerHref || comp.sessionTime || comp.ctaText) && (
+                  <div className="shrink-0 pt-1 sm:pt-0">
+                    {comp.registerHref ? (
+                      <a
+                        href={comp.registerHref}
+                        className="group/btn w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl sm:rounded-2xl btn-continuum px-6 py-3 sm:px-7 sm:py-3.5 text-xs sm:text-sm font-bold text-white transition-all duration-200 hover:scale-105"
+                      >
+                        Register Team
+                        <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                      </a>
+                    ) : comp.sessionTime ? (
+                      <div
+                        className="w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl sm:rounded-2xl border border-cyan-500/30 bg-cyan-950/40 px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-cyan-300 backdrop-blur-md select-none shadow-[0_0_15px_-3px_rgba(0,240,255,0.25)]"
+                      >
+                        <Clock className="h-4 w-4 text-[#00f0ff]" />
+                        <span>{comp.sessionTime}</span>
+                      </div>
+                    ) : comp.ctaText ? (
+                      <div
+                        className="w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl sm:rounded-2xl border border-violet-500/30 bg-violet-950/40 px-6 py-3 sm:px-7 sm:py-3.5 text-xs sm:text-sm font-semibold text-slate-300 backdrop-blur-md cursor-default select-none shadow-[0_0_15px_-3px_rgba(124,58,237,0.3)]"
+                      >
+                        <span className="h-2 w-2 rounded-full bg-[#00f0ff] animate-pulse" />
+                        <span>{comp.ctaText}</span>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
               </div>
             </motion.div>
           )
