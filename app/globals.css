@@ -4,6 +4,41 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@font-face {
+  font-family: 'Eurostile Extended';
+  src: url('/EurostileExtendedBlack.woff') format('woff'),
+       url('/EurostileExtendedBlack.ttf') format('truetype');
+  font-weight: 700 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Varino';
+  src: url('/varino-custom.ttf') format('truetype');
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ethnocentric';
+  src: url('/ethnocentric-rg.woff2') format('woff2'),
+       url('/ethnocentric-rg.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Ethnocentric Rg';
+  src: url('/ethnocentric-rg.woff2') format('woff2'),
+       url('/ethnocentric-rg.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -277,14 +312,23 @@
 .spin-reverse { animation: spin-reverse 26s linear infinite; }
 
 /* ═══════════════════════════════════════════════════════════
-   3D SCI-FI LOGO WORDMARK (ENTREVERSE)
+   TYPOGRAPHY: VARINO & EUROSTILE EXTENDED
    ═══════════════════════════════════════════════════════════ */
+.font-eurostile {
+  font-family: 'Eurostile Extended', 'Eurostile', 'Michroma', sans-serif;
+  letter-spacing: 0.28em;
+}
+
+.font-varino {
+  font-family: 'Varino', 'Orbitron', sans-serif;
+}
+
 .font-logo {
-  font-family: 'Ethnocentric', 'Ethnocentric Rg', 'Orbitron', 'Russo One', var(--font-space-grotesk), sans-serif;
+  font-family: 'Varino', 'Ethnocentric', 'Orbitron', 'Russo One', var(--font-space-grotesk), sans-serif;
 }
 
 .entreverse-3d {
-  font-family: 'Ethnocentric', 'Ethnocentric Rg', 'Orbitron', 'Russo One', var(--font-space-grotesk), sans-serif;
+  font-family: 'Varino', 'Ethnocentric', 'Orbitron', 'Russo One', var(--font-space-grotesk), sans-serif;
   font-weight: 900;
   text-transform: uppercase;
   color: #ffffff;

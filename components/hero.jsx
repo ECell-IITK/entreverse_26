@@ -11,7 +11,7 @@ export function Hero() {
       className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center px-4 pt-20 pb-16 sm:px-8 sm:pt-28 sm:pb-24 lg:pt-32 lg:pb-28 text-center"
     >
       <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center w-full">
-        
+
         {/* 1. Kicker */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
@@ -24,26 +24,15 @@ export function Hero() {
           </p>
         </motion.div>
 
-        {/* 2. 3D Sci-Fi Wordmark with Signature Custom R (down-blade) & V (up-peak) */}
+        {/* 2. Official EntreVerse + Continuum of Innovation Wordmark Lockup */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.05 }}
-          className="w-full flex justify-center mt-6 sm:mt-9"
+          className="w-full flex flex-col items-center justify-center mt-6 sm:mt-9"
         >
-          <EntreVerseLogo className="w-full max-w-[340px] xs:max-w-[420px] sm:max-w-[620px] md:max-w-[760px]" />
-        </motion.div>
-
-        {/* 3. Festival Theme */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, delay: 0.14 }}
-          className="mt-7 sm:mt-10"
-        >
-          <h2 className="font-heading text-sm xs:text-base sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-[0.16em] sm:tracking-[0.25em] md:tracking-[0.3em] uppercase text-white drop-shadow-[0_0_25px_rgba(255,255,255,0.35)]">
-            CONTINUUM OF INNOVATION
-          </h2>
+          <h1 className="sr-only">ENTREVERSE — CONTINUUM OF INNOVATION</h1>
+          <EntreVerseLogo className="w-full max-w-[360px] xs:max-w-[480px] sm:max-w-[680px] md:max-w-[820px] lg:max-w-[920px]" />
         </motion.div>
 
         {/* 4. Reference Date Display */}
@@ -54,7 +43,7 @@ export function Hero() {
           className="mt-6 sm:mt-9"
         >
           <p className="font-sans text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-wider text-[#00f0ff] drop-shadow-[0_0_20px_rgba(0,240,255,0.6)]">
-            29<sup className="text-xs sm:text-sm font-normal">TH</sup> - 30<sup className="text-xs sm:text-sm font-normal">TH</sup> AUGUST, 2026
+            1<sup className="text-xs sm:text-sm font-normal">ST</sup>-4<sup className="text-xs sm:text-sm font-normal">TH</sup> OCTOBER, 2026
           </p>
         </motion.div>
 

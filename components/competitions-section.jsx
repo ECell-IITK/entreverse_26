@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'motion/react'
-import { ArrowRight, TrendingUp, Briefcase, Zap, Users } from 'lucide-react'
+import { ArrowRight, TrendingUp, Briefcase, Zap, Users, Lightbulb } from 'lucide-react'
 
 const COMPETITIONS = [
   {
@@ -9,11 +9,11 @@ const COMPETITIONS = [
     number: '01',
     icon: TrendingUp,
     tone: 'violet',
-    tag: 'UGs & Y26s · VC Bidding',
+    tag: 'Exclusively Y26',
     teamSize: '1–4 members',
     title: 'Venture And Verdict',
     description:
-      'Step into early-stage venture capital. Analyze startup balance sheets, bid in live auction rounds, and pitch to senior VC partners.',
+      ' Strategic decision-making and smart investments are the keys to this challenge. Teams (preferably Y26s) will bid for the most promising opportunities from a set of firms, using provided summaries to evaluate their options, make calculated decisions, and outsmart their competitors. Shortlisted teams will advance to the finale to present their portfolios and compete for exciting prizes.',
     registerHref: '/register?competition=venture-and-verdict',
   },
   {
@@ -25,7 +25,7 @@ const COMPETITIONS = [
     teamSize: '1–4 members',
     title: 'Startup Builder',
     description:
-      'Tackle live business crises. Unravel supply chain and market bottlenecks, then present turnaround roadmaps to corporate leaders.',
+      'An opportunity to dive into the world of entrepreneurship, this challenge invites participants (preferably PGs) to step into the shoes of aspiring business innovators. Teams will tackle real-world problems, think creatively, and develop impactful solutions, transforming ideas into ventures with the potential to make a difference.',
     registerHref: '/register?competition=startup-builder',
   },
   {
@@ -37,8 +37,21 @@ const COMPETITIONS = [
     teamSize: '1–4 members',
     title: 'Start-up-Sprint',
     description:
-      '24 hours on the clock. Whiteboard sketch to working MVP before dawn. Demo live to angels for instant SIIC incubation backing.',
+      'An intense overnight challenge where teams transform ideas into MVPs and prototypes before sunrise. From brainstorming to building, every hour tests creativity, speed, and strategy.',
     registerHref: '/register?competition=start-up-sprint',
+  },
+  {
+    id: 'idea-matters-most',
+    number: '04',
+    icon: Lightbulb,
+    tone: 'blue',
+    tag: 'Open to All · Ideation',
+    teamSize: '1–4 members',
+    title: 'Idea Matters Most',
+    description:
+      'Got a game-changing concept? Transform raw ideas into structured business blueprints, validate problem statements, and pitch to distinguished mentors.',
+    registerHref: null,
+    ctaText: 'Opening Soon',
   },
 ]
 
@@ -70,6 +83,15 @@ const TONE_STYLES = {
       'bg-gradient-to-r from-[#1d4ed8] to-[#00f0ff] text-white shadow-[0_0_24px_-4px_rgba(0,240,255,0.75)] hover:shadow-[0_0_36px_-2px_rgba(0,240,255,0.95)]',
     accentLine: 'from-[#1d4ed8]/80 via-[#00f0ff]/50 to-transparent',
   },
+  blue: {
+    iconBg: 'bg-blue-600/20',
+    iconText: 'text-blue-300',
+    iconRing: 'ring-blue-500/40',
+    glowBg: 'from-blue-900/25',
+    btnBg:
+      'bg-gradient-to-r from-blue-600 via-indigo-600 to-[#00f0ff] text-white shadow-[0_0_24px_-4px_rgba(59,130,246,0.70)] hover:shadow-[0_0_36px_-2px_rgba(59,130,246,0.95)]',
+    accentLine: 'from-blue-600/80 via-[#00f0ff]/50 to-transparent',
+  },
 }
 
 const fade = {
@@ -95,7 +117,7 @@ export function CompetitionsSection() {
           custom={0}
           className="text-balance font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl"
         >
-          Compete in 3{' '}
+          Compete in 4{' '}
           <span className="bg-gradient-to-r from-violet-400 via-indigo-300 to-[#00f0ff] bg-clip-text text-transparent">
             Flagship Arenas
           </span>
@@ -159,13 +181,22 @@ export function CompetitionsSection() {
 
                 {/* CTA Button */}
                 <div className="shrink-0 pt-1 sm:pt-0">
-                  <a
-                    href={comp.registerHref}
-                    className="group/btn w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl sm:rounded-2xl btn-continuum px-6 py-3 sm:px-7 sm:py-3.5 text-xs sm:text-sm font-bold text-white transition-all duration-200 hover:scale-105"
-                  >
-                    Register Team
-                    <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
-                  </a>
+                  {comp.registerHref ? (
+                    <a
+                      href={comp.registerHref}
+                      className="group/btn w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl sm:rounded-2xl btn-continuum px-6 py-3 sm:px-7 sm:py-3.5 text-xs sm:text-sm font-bold text-white transition-all duration-200 hover:scale-105"
+                    >
+                      Register Team
+                      <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover/btn:translate-x-1" />
+                    </a>
+                  ) : (
+                    <div
+                      className="w-full lg:w-auto inline-flex items-center justify-center gap-2 rounded-xl sm:rounded-2xl border border-violet-500/30 bg-violet-950/40 px-6 py-3 sm:px-7 sm:py-3.5 text-xs sm:text-sm font-semibold text-slate-300 backdrop-blur-md cursor-default select-none shadow-[0_0_15px_-3px_rgba(124,58,237,0.3)]"
+                    >
+                      <span className="h-2 w-2 rounded-full bg-[#00f0ff] animate-pulse" />
+                      <span>{comp.ctaText || 'Opening Soon'}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
