@@ -7,7 +7,7 @@ import { Menu, X, ArrowRight } from 'lucide-react'
 const LINKS = [
   { name: 'About', href: '#about' },
   { name: 'Competitions', href: '#competitions' },
-  { name: 'Keynotes', href: '#discussions' },
+  { name: 'Speakers', href: '#speakers' },
 ]
 
 export function SiteNav() {

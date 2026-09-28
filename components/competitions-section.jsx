@@ -1,7 +1,9 @@
 'use client'
 
+import { useState, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import { motion } from 'motion/react'
-import { ArrowRight, TrendingUp, Briefcase, Zap, Users, Lightbulb, Clock } from 'lucide-react'
+import { ArrowRight, TrendingUp, Briefcase, Zap, Users, Lightbulb, Clock, Calendar, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react'
 
 const COMPETITIONS = [
   {
@@ -47,13 +49,54 @@ const COMPETITIONS = [
     tone: 'blue',
     tag: 'Open to All · Ideation',
     teamSize: null,
-    sessionTime: '4 Oct · 11:00 AM – 1:30 PM',
+    sessionTime: '4 Oct · 1:00 PM – 1:30 PM',
     title: 'Idea Matters Most',
     description:
-      'Challenge conventional thinking, question assumptions, and explore how unconventional ideas can spark meaningful innovation. Discover new perspectives, explore opportunities, and learn to think beyond the obvious with insights from the Ideas Matter Most team.',
+      'Ideas Matter Most: Beyond the Obvious is a premium thought-leadership platform bringing together founders, investors, industry leaders, innovators, academics, and changemakers. The event aims to challenge conventional thinking through meaningful conversations around entrepreneurship, technology, innovation, and the future of enterprise. It will explore founder journeys, unconventional ideas, emerging opportunities, and the decisions that shape impactful ventures. The IIT Kanpur edition will provide students with access to diverse perspectives and real-world insights from accomplished leaders. Through engaging conversations, interactive sessions, and networking opportunities, the event will foster curiosity, innovation, and entrepreneurial thinking.',
     registerHref: null,
     ctaText: null,
   },
+]
+
+const IDEA_MATTERS_SPEAKERS = [
+  {
+    name: 'Dr. Mamtha Satish',
+    role: 'CEO and Founder, The Innerworld Counselling for Mental Wellbeing Pvt. Ltd.',
+    image: '/speakers/dr_mamtha_satish.png',
+  },
+  {
+    name: 'Shivangi Narula',
+    role: 'Founder & CEO, Skilldify',
+    image: '/speakers/shivangi_narula.png',
+  },
+  {
+    name: 'Anupriya Nagar',
+    role: 'Film Producer, Hanuman Ansh | Economist | Storyteller',
+    image: '/speakers/anupriya_nagar.png',
+  },
+  {
+    name: 'Sandeep Chatterjee',
+    role: 'Global Supply Chain & Sustainability Strategist, Transformation & Innovation Leader',
+    image: '/speakers/sandeep_chatterjee.png',
+  },
+  {
+    name: 'Dinesh Rajpurohit',
+    role: 'Entrepreneur | Manufacturing Leader | Chairman & Managing Director – Eleanor Industries Pvt. Ltd.',
+    image: '/speakers/dinesh_rajpurohit.png',
+  },
+  {
+    name: 'Anurag Saini',
+    role: 'Wealth Partner – W by Groww, Guinness World Record Holder, Ultra Marathon Runner',
+    image: '/speakers/anurag_saini.png',
+  },
+]
+
+const IDEA_MATTERS_THEMES = [
+  'Challenging conventional thinking',
+  'Questioning assumptions',
+  'Exploring unconventional ideas',
+  'Discovering new perspectives',
+  'Thinking differently about opportunities and innovation',
 ]
 
 const TONE_STYLES = {
@@ -211,10 +254,262 @@ export function CompetitionsSection() {
                   </div>
                 )}
               </div>
+
+              {/* What You'll Explore / The Session is About */}
+              {comp.id === 'idea-matters-most' && (
+                <div className="mt-8 pt-7 border-t border-white/10 w-full">
+                  <div className="rounded-2xl border border-blue-500/25 bg-blue-950/20 p-5 sm:p-6">
+                    <div className="flex items-center gap-2 mb-3">
+                      
+                      
+                      <span className="text-xs text-slate-400 font-normal">· The Session is About</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {IDEA_MATTERS_THEMES.map((theme, idx) => (
+                        <div key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-300">
+                          <span className="mt-1 h-1.5 w-1.5 rounded-full bg-[#00f0ff] shrink-0" />
+                          <span>{theme}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </motion.div>
           )
         })}
       </div>
+
+      {/* Separate Visual Section: Meet the Speakers — Horizontal Carousel */}
+      <div id="speakers" className="mt-16 sm:mt-24 pt-12 sm:pt-16 border-t border-violet-500/20 scroll-mt-24">
+        <div className="mx-auto max-w-3xl text-center mb-10 sm:mb-14">
+          
+          <h3 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+            Meet the <span className="bg-gradient-to-r from-violet-400 via-indigo-300 to-[#00f0ff] bg-clip-text text-transparent">Speakers</span>
+          </h3>
+          <p className="mt-3 text-xs sm:text-sm md:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
+            Learn from diverse perspectives, experiences, and ideas from leaders and innovators across industries.
+          </p>
+        </div>
+
+        {/* Interactive Speaker Carousel with Zero Face Cropping */}
+        <SpeakerCarousel speakers={IDEA_MATTERS_SPEAKERS} />
+      </div>
     </section>
+  )
+}
+
+function SpeakerCarousel({ speakers }) {
+  // Triple the array for seamless infinite looping: [set1, set2, set3]
+  const startIndex = speakers.length // Start at index 6 (middle set)
+
+  const [currentIndex, setCurrentIndex] = useState(startIndex)
+  const [isTransitioning, setIsTransitioning] = useState(true)
+  const [cardStep, setCardStep] = useState(320) // fallback step (card width + gap)
+
+  const containerRef = useRef(null)
+  const firstCardRef = useRef(null)
+  const secondCardRef = useRef(null)
+
+  // Measure card width + gap dynamically
+  useEffect(() => {
+    const updateCardStep = () => {
+      if (firstCardRef.current) {
+        const first = firstCardRef.current
+        const width = first.offsetWidth
+        const gap = secondCardRef.current
+          ? secondCardRef.current.offsetLeft - (first.offsetLeft + width)
+          : 20
+        if (width > 0) {
+          setCardStep(width + gap)
+        }
+      }
+    }
+
+    updateCardStep()
+    const timer = setTimeout(updateCardStep, 100)
+    window.addEventListener('resize', updateCardStep)
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener('resize', updateCardStep)
+    }
+  }, [])
+
+  // Auto-rotate every 2 seconds (2000ms); resets on manual interaction
+  useEffect(() => {
+    const timer = setInterval(() => {
+      handleNext()
+    }, 2000)
+    return () => clearInterval(timer)
+  }, [currentIndex, isTransitioning])
+
+  // Seamless boundary wrap when reaching the duplicated ends
+  const handleTransitionEnd = () => {
+    if (currentIndex >= speakers.length * 2) {
+      // Reached 3rd set, smoothly snap back to 2nd set without animation
+      setIsTransitioning(false)
+      setCurrentIndex((prev) => prev - speakers.length)
+    } else if (currentIndex < speakers.length) {
+      // Reached 1st set, smoothly snap forward to 2nd set without animation
+      setIsTransitioning(false)
+      setCurrentIndex((prev) => prev + speakers.length)
+    }
+  }
+
+  // Re-enable CSS transition on next tick after seamless snap
+  useEffect(() => {
+    if (!isTransitioning) {
+      const anim = requestAnimationFrame(() => {
+        setIsTransitioning(true)
+      })
+      return () => cancelAnimationFrame(anim)
+    }
+  }, [isTransitioning])
+
+  const handlePrev = () => {
+    if (!isTransitioning) return
+    setCurrentIndex((prev) => prev - 1)
+  }
+
+  const handleNext = () => {
+    if (!isTransitioning) return
+    setCurrentIndex((prev) => prev + 1)
+  }
+
+  const handleDotClick = (targetIndex) => {
+    const currentNorm = ((currentIndex % speakers.length) + speakers.length) % speakers.length
+    const diff = targetIndex - currentNorm
+    setCurrentIndex((prev) => prev + diff)
+  }
+
+  const activeSpeakerIndex = ((currentIndex % speakers.length) + speakers.length) % speakers.length
+
+  // Flattened array of 18 items with unique keys
+  const allCards = [
+    ...speakers.map((s, i) => ({ ...s, origIndex: i, key: `set1-${i}` })),
+    ...speakers.map((s, i) => ({ ...s, origIndex: i, key: `set2-${i}` })),
+    ...speakers.map((s, i) => ({ ...s, origIndex: i, key: `set3-${i}` })),
+  ]
+
+  return (
+    <div className="relative mx-auto w-full max-w-7xl px-2 sm:px-4">
+      {/* Top Header Controls: Title Badge + Navigation Arrows + Indicator Dots */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 px-2">
+        <div className="flex items-center gap-2">
+          
+        </div>
+
+        {/* Subtle Navigation Arrows & Dots */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handlePrev}
+            type="button"
+            aria-label="Previous speaker"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-violet-500/30 bg-[#0c0924]/80 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:border-cyan-400 hover:text-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] active:scale-95 cursor-pointer"
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+
+          {/* 6 indicator dots */}
+          <div className="flex items-center gap-1.5 px-1.5">
+            {speakers.map((s, idx) => (
+              <button
+                key={s.name}
+                onClick={() => handleDotClick(idx)}
+                type="button"
+                aria-label={`Jump to speaker ${idx + 1}`}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  idx === activeSpeakerIndex
+                    ? 'w-6 h-2 bg-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.9)]'
+                    : 'w-2 h-2 bg-white/25 hover:bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            onClick={handleNext}
+            type="button"
+            aria-label="Next speaker"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-violet-500/30 bg-[#0c0924]/80 text-white backdrop-blur-md transition-all duration-200 hover:scale-105 hover:border-cyan-400 hover:text-[#00f0ff] hover:shadow-[0_0_15px_rgba(0,240,255,0.4)] active:scale-95 cursor-pointer"
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* HORIZONTAL CAROUSEL TRACK: ALL EQUAL-SIZED CARDS */}
+      <div
+        ref={containerRef}
+        className="w-full overflow-hidden py-3"
+      >
+        <div
+          className="flex flex-row items-stretch gap-4 sm:gap-5"
+          style={{
+            transform: `translateX(-${currentIndex * cardStep}px)`,
+            transition: isTransitioning
+              ? 'transform 600ms cubic-bezier(0.25, 1, 0.5, 1)'
+              : 'none',
+          }}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {allCards.map((speaker, index) => {
+            return (
+              <div
+                key={speaker.key}
+                ref={(el) => {
+                  if (index === 0) firstCardRef.current = el
+                  if (index === 1) secondCardRef.current = el
+                }}
+                className="w-[84vw] xs:w-[320px] sm:w-[280px] md:w-[290px] lg:w-[300px] flex-shrink-0 group relative flex flex-col justify-between rounded-3xl border border-violet-500/25 bg-[#090724]/85 p-4 sm:p-5 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/60 hover:shadow-[0_0_30px_rgba(0,240,255,0.22)] hover:-translate-y-1.5 cursor-default select-none overflow-hidden"
+              >
+                {/* Laser top accent line */}
+                <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
+
+                {/* Speaker Portrait with ZERO FACE CROPPING */}
+                <div className="relative h-64 sm:h-72 md:h-80 w-full overflow-hidden rounded-2xl bg-gradient-to-b from-slate-900/90 via-[#0a0725] to-[#040114] flex items-center justify-center p-2.5">
+                  <Image
+                    src={speaker.image}
+                    alt={speaker.name}
+                    fill
+                    className="object-contain object-bottom drop-shadow-[0_14px_28px_rgba(0,0,0,0.9)] transition-transform duration-300 group-hover:scale-105"
+                    priority={index >= 6 && index < 10}
+                    sizes="(max-width: 640px) 85vw, 300px"
+                  />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#040114]/90 to-transparent" />
+                </div>
+
+                {/* Speaker Information: Full Name and Complete Designation */}
+                <div className="mt-4 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h4 className="font-heading text-lg sm:text-xl font-bold tracking-tight text-white group-hover:text-[#00f0ff] transition-colors leading-snug">
+                      {speaker.name}
+                    </h4>
+
+                    <p className="mt-1.5 text-xs sm:text-sm text-cyan-200/85 leading-relaxed font-normal">
+                      {speaker.role}
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-slate-400 font-medium">
+                    <span className="flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#00f0ff]" />
+                      Idea Matters Most
+                    </span>
+                    <span>4 Oct</span>
+                  </div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+
+      <div className="mt-4 text-center">
+        <p className="text-[11px] text-slate-400 font-mono">
+          Auto-sliding every 2 seconds · Use arrows to navigate
+        </p>
+      </div>
+    </div>
   )
 }
