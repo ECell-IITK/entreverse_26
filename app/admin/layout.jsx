@@ -87,7 +87,7 @@ export default function AdminLayout({ children }) {
         {/* Sidebar header */}
         <div className="flex items-center gap-3 px-5 py-5 border-b border-white/[0.07]">
           <Link href="/" className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 hover:border-primary/40 transition-colors">
-            <img src="/logo_ecell.png" alt="E-Cell" className="h-6 w-6" />
+            <img src="/logo_ecell_emblem.png" alt="E-Cell" className="h-6 w-6 object-contain" />
           </Link>
           <div className="min-w-0">
             <p className="font-heading text-sm font-bold text-foreground leading-none">EntreVerse</p>

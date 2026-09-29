@@ -150,22 +150,12 @@ function RegisterPageInner() {
               <span>Home</span>
             </Link>
 
-            <Link href="/" className="group flex items-center gap-2.5 transition-opacity hover:opacity-90">
-              <div className="relative flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center shrink-0">
-                <img
-                  src="/logo_ecell.png"
-                  alt="Entrepreneurship Cell IIT Kanpur Logo"
-                  className="h-full w-full object-contain drop-shadow-[0_0_8px_rgba(124,58,237,0.7)]"
-                />
-              </div>
-              <div className="hidden sm:flex flex-col justify-center leading-none">
-                <p className="font-heading text-sm sm:text-base font-bold text-white group-hover:text-[#00f0ff] transition-colors">
-                  Entrepreneurship Cell
-                </p>
-                <p className="text-[9px] sm:text-[10px] font-semibold tracking-[0.14em] text-[#00f0ff] mt-0.5">
-                  IIT Kanpur
-                </p>
-              </div>
+            <Link href="/" className="group flex items-center transition-opacity hover:opacity-90" aria-label="Entrepreneurship Cell IIT Kanpur">
+              <img
+                src="/logo_ecell.png"
+                alt="Entrepreneurship Cell IIT Kanpur"
+                className="h-8 sm:h-9 w-auto object-contain drop-shadow-[0_0_8px_rgba(245,140,30,0.3)] transition-transform group-hover:scale-105"
+              />
             </Link>
           </div>
 

@@ -36,23 +36,14 @@ export function SiteNav() {
           {/* Logo */}
           <Link
             href="/"
-            className="group flex items-center gap-3 transition-opacity hover:opacity-95"
+            className="group flex items-center transition-opacity hover:opacity-95"
+            aria-label="Entrepreneurship Cell IIT Kanpur"
           >
-            <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center shrink-0">
-              <img
-                src="/logo_ecell.png"
-                alt="Entrepreneurship Cell IIT Kanpur Logo"
-                className="h-full w-full object-contain drop-shadow-[0_0_12px_rgba(124,58,237,0.7)] transition-transform group-hover:scale-105"
-              />
-            </div>
-            <div className="flex flex-col justify-center leading-none">
-              <span className="font-heading text-sm sm:text-base font-bold tracking-tight text-white transition-colors group-hover:text-[#00f0ff]">
-                Entrepreneurship Cell
-              </span>
-              <span className="text-[10px] sm:text-[11px] font-semibold tracking-[0.14em] text-[#00f0ff] mt-0.5">
-                IIT Kanpur
-              </span>
-            </div>
+            <img
+              src="/logo_ecell.png"
+              alt="Entrepreneurship Cell IIT Kanpur"
+              className="h-9 sm:h-10.5 w-auto object-contain drop-shadow-[0_0_12px_rgba(245,140,30,0.35)] transition-transform group-hover:scale-105"
+            />
           </Link>
 
           {/* Desktop Navigation Links */}

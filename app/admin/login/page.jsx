@@ -38,7 +38,7 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3">
           <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/30 bg-violet-950/40 shadow-[0_0_20px_rgba(124,58,237,0.4)]">
-            <img src="/logo_ecell.png" alt="E-Cell Logo" className="h-10 w-10 drop-shadow-[0_0_8px_rgba(124,58,237,0.7)]" />
+            <img src="/logo_ecell_emblem.png" alt="E-Cell Logo" className="h-10 w-10 object-contain drop-shadow-[0_0_8px_rgba(245,140,30,0.6)]" />
           </div>
           <div className="text-center">
             <h1 className="font-heading text-xl font-extrabold text-white flex items-center justify-center gap-1.5">

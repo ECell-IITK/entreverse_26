@@ -59,9 +59,9 @@ export function InnovationCore() {
             }}
           >
             <img
-              src="/logo_ecell.png"
+              src="/logo_ecell_emblem.png"
               alt="E-Cell Emblem"
-              className="h-8 w-8 sm:h-9 sm:w-9 object-contain drop-shadow-[0_0_10px_rgba(0,240,255,0.9)]"
+              className="h-8 w-8 sm:h-9 sm:w-9 object-contain drop-shadow-[0_0_10px_rgba(245,140,30,0.8)]"
             />
           </div>
         </div>
