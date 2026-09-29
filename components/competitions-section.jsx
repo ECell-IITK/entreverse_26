@@ -39,7 +39,7 @@ const COMPETITIONS = [
     teamSize: '1–4 members',
     title: 'Start-up-Sprint',
     description:
-      'An intense overnight challenge where teams transform ideas into MVPs and prototypes before sunrise. From brainstorming to building, every hour tests creativity, speed, and strategy.',
+      '24 hours on the clock. Draw a domain on the spot, identify a pressing problem, and take your solution from whiteboard sketch to a working MVP before dawn. Demo live to investors and mentors for instant SIIC incubation backing.',
     registerHref: '/register?competition=start-up-sprint',
   },
   {
@@ -260,8 +260,8 @@ export function CompetitionsSection() {
                 <div className="mt-8 pt-7 border-t border-white/10 w-full">
                   <div className="rounded-2xl border border-blue-500/25 bg-blue-950/20 p-5 sm:p-6">
                     <div className="flex items-center gap-2 mb-3">
-                      
-                      
+
+
                       <span className="text-xs text-slate-400 font-normal">· The Session is About</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -283,7 +283,7 @@ export function CompetitionsSection() {
       {/* Separate Visual Section: Meet the Speakers — Horizontal Carousel */}
       <div id="speakers" className="mt-16 sm:mt-24 pt-12 sm:pt-16 border-t border-violet-500/20 scroll-mt-24">
         <div className="mx-auto max-w-3xl text-center mb-10 sm:mb-14">
-          
+
           <h3 className="font-heading text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
             Meet the <span className="bg-gradient-to-r from-violet-400 via-indigo-300 to-[#00f0ff] bg-clip-text text-transparent">Speakers</span>
           </h3>
@@ -455,11 +455,10 @@ function SpeakerCarousel({ speakers }) {
                 onClick={() => handleDotClick(idx)}
                 type="button"
                 aria-label={`Jump to speaker ${idx + 1}`}
-                className={`transition-all duration-300 rounded-full cursor-pointer ${
-                  idx === activeSpeakerIndex
+                className={`transition-all duration-300 rounded-full cursor-pointer ${idx === activeSpeakerIndex
                     ? 'w-6 h-2 bg-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.9)]'
                     : 'w-2 h-2 bg-white/25 hover:bg-white/50'
-                }`}
+                  }`}
               />
             ))}
           </div>
