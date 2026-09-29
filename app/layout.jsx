@@ -27,6 +27,7 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL
 
 export const metadata = {
   metadataBase: new URL(baseUrl),
+  applicationName: 'Entrepreneurship Cell IIT Kanpur',
   title: {
     default: 'EntreVerse 2026 — Where Ideas Become Impact',
     template: '%s | EntreVerse 2026',
@@ -42,10 +43,10 @@ export const metadata = {
     type: 'website',
     locale: 'en_IN',
     url: baseUrl,
-    siteName: 'EntreVerse 2026',
+    siteName: 'Entrepreneurship Cell IIT Kanpur',
     title: 'EntreVerse 2026 — Where Ideas Become Impact',
     description: "IIT Kanpur's flagship entrepreneurship festival. 29–30 August 2026. Competitions, workshops, and startup experiences.",
-    images: [{ url: '/logo_ecell.png', width: 800, height: 600, alt: 'EntreVerse 2026' }],
+    images: [{ url: '/logo_ecell.png', width: 800, height: 600, alt: 'EntreVerse 2026 — E-Cell IIT Kanpur' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -55,9 +56,17 @@ export const metadata = {
     creator: '@ecelliitk',
   },
   icons: {
-    icon: '/logo_ecell.png',
-    shortcut: '/logo_ecell.png',
-    apple: '/logo_ecell.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/icon-96.png', sizes: '96x96', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/logo_ecell.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   robots: { index: true, follow: true },
   alternates: { canonical: baseUrl },
@@ -69,11 +78,30 @@ export const viewport = {
 }
 
 export default function RootLayout({ children }) {
+  const websiteSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Entrepreneurship Cell IIT Kanpur',
+    alternateName: [
+      'EntreVerse 2026',
+      'EntreVerse IITK',
+      'E-Cell IIT Kanpur',
+      'E-Cell IITK',
+    ],
+    url: baseUrl,
+  }
+
   return (
     <html
       lang="en"
       className={`dark ${spaceGrotesk.variable} ${inter.variable} ${geistMono.variable}`}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+      </head>
       <body className="bg-background font-sans antialiased">
         <SpaceBackground />
         {children}

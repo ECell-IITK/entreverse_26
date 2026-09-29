@@ -300,28 +300,28 @@ export function CompetitionsSection() {
 }
 
 function SpeakerCarousel({ speakers }) {
+  const count = speakers.length
   // Triple the array for seamless infinite looping: [set1, set2, set3]
-  const startIndex = speakers.length // Start at index 6 (middle set)
+  // Middle set starts at index = count
+  const startIndex = count
 
   const [currentIndex, setCurrentIndex] = useState(startIndex)
   const [isTransitioning, setIsTransitioning] = useState(true)
-  const [cardStep, setCardStep] = useState(320) // fallback step (card width + gap)
+  const [cardStep, setCardStep] = useState(320)
+  const [isPaused, setIsPaused] = useState(false)
 
-  const containerRef = useRef(null)
+  const trackRef = useRef(null)
   const firstCardRef = useRef(null)
-  const secondCardRef = useRef(null)
 
-  // Measure card width + gap dynamically
+  // Measure card width + gap dynamically with ResizeObserver
   useEffect(() => {
     const updateCardStep = () => {
-      if (firstCardRef.current) {
-        const first = firstCardRef.current
-        const width = first.offsetWidth
-        const gap = secondCardRef.current
-          ? secondCardRef.current.offsetLeft - (first.offsetLeft + width)
-          : 20
-        if (width > 0) {
-          setCardStep(width + gap)
+      if (firstCardRef.current && trackRef.current) {
+        const cardWidth = firstCardRef.current.offsetWidth
+        const style = window.getComputedStyle(trackRef.current)
+        const gap = parseFloat(style.columnGap || style.gap) || 20
+        if (cardWidth > 0) {
+          setCardStep(cardWidth + gap)
         }
       }
     }
@@ -335,30 +335,57 @@ function SpeakerCarousel({ speakers }) {
     }
   }, [])
 
-  // Auto-rotate every 2 seconds (2000ms); resets on manual interaction
+  // Auto-rotate every 2.8s; pauses on user hover or when browser tab is hidden
   useEffect(() => {
-    const timer = setInterval(() => {
-      handleNext()
-    }, 2000)
-    return () => clearInterval(timer)
-  }, [currentIndex, isTransitioning])
+    if (isPaused) return
 
-  // Seamless boundary wrap when reaching the duplicated ends
-  const handleTransitionEnd = () => {
-    if (currentIndex >= speakers.length * 2) {
+    const timer = setInterval(() => {
+      if (typeof document !== 'undefined' && document.hidden) {
+        return // Prevent drifting while tab is inactive
+      }
+      handleNext()
+    }, 2800)
+
+    return () => clearInterval(timer)
+  }, [isPaused, count])
+
+  // Reset index to visible middle set if user returns from background tab
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        setCurrentIndex((prev) => {
+          const norm = ((prev % count) + count) % count
+          return count + norm
+        })
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [count])
+
+  // Seamless boundary wrap when reaching duplicated ends
+  const handleTransitionEnd = (e) => {
+    // Only respond to the transform transition of the track itself, ignore child transitions (hover effects)
+    if (e.target !== e.currentTarget || e.propertyName !== 'transform') return
+
+    if (currentIndex >= count * 2) {
       // Reached 3rd set, smoothly snap back to 2nd set without animation
       setIsTransitioning(false)
-      setCurrentIndex((prev) => prev - speakers.length)
-    } else if (currentIndex < speakers.length) {
+      setCurrentIndex((prev) => prev - count)
+    } else if (currentIndex < count) {
       // Reached 1st set, smoothly snap forward to 2nd set without animation
       setIsTransitioning(false)
-      setCurrentIndex((prev) => prev + speakers.length)
+      setCurrentIndex((prev) => prev + count)
     }
   }
 
-  // Re-enable CSS transition on next tick after seamless snap
+  // Force reflow and re-enable CSS transition on next frame after seamless snap
   useEffect(() => {
     if (!isTransitioning) {
+      if (trackRef.current) {
+        void trackRef.current.offsetHeight // commit style change without transition
+      }
       const anim = requestAnimationFrame(() => {
         setIsTransitioning(true)
       })
@@ -367,22 +394,26 @@ function SpeakerCarousel({ speakers }) {
   }, [isTransitioning])
 
   const handlePrev = () => {
-    if (!isTransitioning) return
-    setCurrentIndex((prev) => prev - 1)
+    setCurrentIndex((prev) => {
+      if (prev <= 0) return count - 1
+      return prev - 1
+    })
   }
 
   const handleNext = () => {
-    if (!isTransitioning) return
-    setCurrentIndex((prev) => prev + 1)
+    setCurrentIndex((prev) => {
+      if (prev >= count * 2 + 1) return count + 1
+      return prev + 1
+    })
   }
 
   const handleDotClick = (targetIndex) => {
-    const currentNorm = ((currentIndex % speakers.length) + speakers.length) % speakers.length
+    const currentNorm = ((currentIndex % count) + count) % count
     const diff = targetIndex - currentNorm
     setCurrentIndex((prev) => prev + diff)
   }
 
-  const activeSpeakerIndex = ((currentIndex % speakers.length) + speakers.length) % speakers.length
+  const activeSpeakerIndex = ((currentIndex % count) + count) % count
 
   // Flattened array of 18 items with unique keys
   const allCards = [
@@ -392,11 +423,17 @@ function SpeakerCarousel({ speakers }) {
   ]
 
   return (
-    <div className="relative mx-auto w-full max-w-7xl px-2 sm:px-4">
-      {/* Top Header Controls: Title Badge + Navigation Arrows + Indicator Dots */}
+    <div
+      className="relative mx-auto w-full max-w-7xl px-2 sm:px-4"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Top Header Controls: Navigation Arrows + Indicator Dots */}
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3 px-2">
         <div className="flex items-center gap-2">
-          
+          <span className="text-xs sm:text-sm font-medium text-slate-400">
+            {activeSpeakerIndex + 1} / {count}
+          </span>
         </div>
 
         {/* Subtle Navigation Arrows & Dots */}
@@ -410,7 +447,7 @@ function SpeakerCarousel({ speakers }) {
             <ChevronLeft className="h-5 w-5" />
           </button>
 
-          {/* 6 indicator dots */}
+          {/* Indicator dots */}
           <div className="flex items-center gap-1.5 px-1.5">
             {speakers.map((s, idx) => (
               <button
@@ -438,12 +475,10 @@ function SpeakerCarousel({ speakers }) {
         </div>
       </div>
 
-      {/* HORIZONTAL CAROUSEL TRACK: ALL EQUAL-SIZED CARDS */}
-      <div
-        ref={containerRef}
-        className="w-full overflow-hidden py-3"
-      >
+      {/* HORIZONTAL CAROUSEL TRACK */}
+      <div className="w-full overflow-hidden py-3">
         <div
+          ref={trackRef}
           className="flex flex-row items-stretch gap-4 sm:gap-5"
           style={{
             transform: `translateX(-${currentIndex * cardStep}px)`,
@@ -459,7 +494,6 @@ function SpeakerCarousel({ speakers }) {
                 key={speaker.key}
                 ref={(el) => {
                   if (index === 0) firstCardRef.current = el
-                  if (index === 1) secondCardRef.current = el
                 }}
                 className="w-[84vw] xs:w-[320px] sm:w-[280px] md:w-[290px] lg:w-[300px] flex-shrink-0 group relative flex flex-col justify-between rounded-3xl border border-violet-500/25 bg-[#090724]/85 p-4 sm:p-5 backdrop-blur-xl transition-all duration-300 hover:border-cyan-400/60 hover:shadow-[0_0_30px_rgba(0,240,255,0.22)] hover:-translate-y-1.5 cursor-default select-none overflow-hidden"
               >
@@ -472,8 +506,9 @@ function SpeakerCarousel({ speakers }) {
                     src={speaker.image}
                     alt={speaker.name}
                     fill
+                    priority
+                    unoptimized
                     className="object-contain object-bottom drop-shadow-[0_14px_28px_rgba(0,0,0,0.9)] transition-transform duration-300 group-hover:scale-105"
-                    priority={index >= 6 && index < 10}
                     sizes="(max-width: 640px) 85vw, 300px"
                   />
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[#040114]/90 to-transparent" />
@@ -507,7 +542,7 @@ function SpeakerCarousel({ speakers }) {
 
       <div className="mt-4 text-center">
         <p className="text-[11px] text-slate-400 font-mono">
-          Auto-sliding every 2 seconds · Use arrows to navigate
+          Auto-sliding · Hover to pause · Use arrows to navigate
         </p>
       </div>
     </div>
