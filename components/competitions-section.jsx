@@ -49,7 +49,7 @@ const COMPETITIONS = [
     tone: 'blue',
     tag: 'Open to All · Ideation',
     teamSize: null,
-    sessionTime: '4 Oct · 1:00 PM – 1:30 PM',
+    sessionTime: '4 Oct · 11:00 AM – 1:30 PM',
     title: 'Idea Matters Most',
     description:
       'Ideas Matter Most: Beyond the Obvious is a premium thought-leadership platform bringing together founders, investors, industry leaders, innovators, academics, and changemakers. The event aims to challenge conventional thinking through meaningful conversations around entrepreneurship, technology, innovation, and the future of enterprise. It will explore founder journeys, unconventional ideas, emerging opportunities, and the decisions that shape impactful ventures. The IIT Kanpur edition will provide students with access to diverse perspectives and real-world insights from accomplished leaders. Through engaging conversations, interactive sessions, and networking opportunities, the event will foster curiosity, innovation, and entrepreneurial thinking.',
@@ -456,8 +456,8 @@ function SpeakerCarousel({ speakers }) {
                 type="button"
                 aria-label={`Jump to speaker ${idx + 1}`}
                 className={`transition-all duration-300 rounded-full cursor-pointer ${idx === activeSpeakerIndex
-                    ? 'w-6 h-2 bg-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.9)]'
-                    : 'w-2 h-2 bg-white/25 hover:bg-white/50'
+                  ? 'w-6 h-2 bg-[#00f0ff] shadow-[0_0_10px_rgba(0,240,255,0.9)]'
+                  : 'w-2 h-2 bg-white/25 hover:bg-white/50'
                   }`}
               />
             ))}
